@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">DefinitionsDefectsBuildingStructures</string>
+    <string name="app">Checkpoint-K</string>
+    <string name="definition">Работа на объекте</string>
+    <string name="logIn">Войти</string>
+    <string name="entering">Вход</string>
+    <string name="registration">Регистрация</string>
+    <string name="signUp">Регистрация</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="recovery_hint">Забыл пароль</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="patronymic">Отчество</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="recovering">Восстановить</string>
+</resources>
