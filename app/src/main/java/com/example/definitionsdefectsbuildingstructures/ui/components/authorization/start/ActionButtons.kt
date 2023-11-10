@@ -26,12 +26,10 @@ fun ActionButtons(
     ) {
         CreateButtonForAuthorization(
             text = stringResource(id = R.string.logIn),
-            true,
             onLogInClick
         )
         CreateButtonForAuthorization(
             text = stringResource(id = R.string.signUp),
-            true,
             onSignUpClick
         )
     }

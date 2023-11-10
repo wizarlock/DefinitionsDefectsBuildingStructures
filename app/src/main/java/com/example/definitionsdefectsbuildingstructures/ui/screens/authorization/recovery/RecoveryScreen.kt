@@ -19,6 +19,8 @@ fun RecoveryScreen(
 ) {
     val viewModel: RecoveryViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val uiStateBoolean by viewModel.uiStateBoolean.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -26,8 +28,9 @@ fun RecoveryScreen(
     ) {
         BoxRecovery(
             uiState,
+            uiStateBoolean,
             viewModel::onUiAction,
-            onRecoveryClick = { navController.navigate(LogIn.route) { popUpTo(LogIn.route) } }
+            onRecoveryClick = { if (viewModel.areFieldsValid()) navController.navigate(LogIn.route) { popUpTo(LogIn.route) } }
         )
     }
 }

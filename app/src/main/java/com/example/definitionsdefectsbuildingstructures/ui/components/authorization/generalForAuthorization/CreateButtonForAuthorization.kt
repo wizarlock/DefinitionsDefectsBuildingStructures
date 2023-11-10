@@ -14,13 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CreateButtonForAuthorization(text: String, enabled: Boolean, onClick: () -> Unit) {
+fun CreateButtonForAuthorization(text: String,  onClick: () -> Unit) {
     Button(
         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
         onClick = onClick,
         shape = CircleShape,
         border = BorderStroke(2.dp, Color.Black),
-        enabled = enabled,
         modifier = Modifier
             .widthIn(min = 240.dp)
             .padding(top = 10.dp)

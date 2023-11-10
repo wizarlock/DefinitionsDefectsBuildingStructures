@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 fun TextFieldForAuthorization(
     label: String,
     text: String,
+    isValid: Boolean,
     onValueChange: (String) -> Unit,
     typeOfKeyboard: KeyboardType
 ) {
@@ -32,17 +33,17 @@ fun TextFieldForAuthorization(
     OutlinedTextField(
         modifier = Modifier.padding(10.dp),
         value = text.takeIf { it.isNotEmpty() }?.toString() ?: "",
-        onValueChange = { onValueChange(it.take(25)) },
+        onValueChange = { onValueChange(it) },
         label = {
             Text(
                 text = label,
-                color = Color.Black
+                color = if (isValid) Color.Black else Color.Red
             )
         },
         colors = OutlinedTextFieldDefaults.colors(
-            cursorColor = Color.Black,
-            focusedBorderColor = Color.Black,
-            unfocusedBorderColor = Color.Black,
+            cursorColor = if (isValid) Color.Black else Color.Red,
+            focusedBorderColor = if (isValid) Color.Black else Color.Red,
+            unfocusedBorderColor = if (isValid) Color.Black else Color.Red,
         ),
         keyboardOptions = KeyboardOptions(
             keyboardType = typeOfKeyboard,

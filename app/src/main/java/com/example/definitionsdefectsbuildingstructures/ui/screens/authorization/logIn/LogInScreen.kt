@@ -12,6 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.Projects
 import com.example.definitionsdefectsbuildingstructures.data.navigation.Recovery
+import com.example.definitionsdefectsbuildingstructures.data.navigation.Start
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.logIn.BoxLogIn
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.logIn.LinkToRecovery
 
@@ -21,6 +22,8 @@ fun LogInScreen(
 ) {
     val viewModel: LogInViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val uiStateBoolean by viewModel.uiStateBoolean.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -28,8 +31,9 @@ fun LogInScreen(
     ) {
         BoxLogIn(
             uiState,
+            uiStateBoolean,
             viewModel::onUiAction,
-            onEnteringClick = { navController.navigate(Projects.route) }
+            onEnteringClick = { if (viewModel.areFieldsValid()) navController.navigate(Projects.route) { popUpTo(Start.route) } }
         )
         LinkToRecovery(onLinkClick = { navController.navigate(Recovery.route) })
     }

@@ -19,6 +19,8 @@ fun SignUpScreen(
 ) {
     val viewModel: SignUpViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val uiStateBoolean by viewModel.uiStateBoolean.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -26,8 +28,9 @@ fun SignUpScreen(
     ) {
         BoxSignUp(
             uiState,
+            uiStateBoolean,
             viewModel::onUiAction,
-            onRegistrationClick = { navController.navigate(Start.route) { popUpTo(Start.route) } }
+            onRegistrationClick = { if (viewModel.areFieldsValid()) navController.navigate(Start.route) { popUpTo(Start.route) } }
         )
     }
 }

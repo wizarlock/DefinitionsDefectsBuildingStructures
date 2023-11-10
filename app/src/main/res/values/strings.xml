@@ -16,4 +16,11 @@
     <string name="new_password">Новый пароль</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="recovering">Восстановить</string>
+    <string name="incorrect_email">Введите корректный email</string>
+    <string name="incorrect_password">Пароль состоит минимум из 6 символов, \n латиница,  должна присутствовать \n 1 заглавная и маленькая буква</string>
+    <string name="incorrect_phoneNum">Номер телефона начинается с 8, состоит из 11 цифр</string>
+    <string name="incorrect_repeatPassword">Пароли не совпадают</string>
+    <string name="incorrect_surname">Введите корректную фамилию</string>
+    <string name="incorrect_name">Введите корректное имя</string>
+    <string name="incorrect_patronymic">Введите корректное отчество</string>
 </resources>
