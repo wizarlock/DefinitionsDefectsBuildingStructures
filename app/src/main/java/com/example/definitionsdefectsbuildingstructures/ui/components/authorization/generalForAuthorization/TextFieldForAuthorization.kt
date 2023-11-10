@@ -14,6 +14,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -21,8 +23,8 @@ import androidx.compose.ui.unit.dp
 fun TextFieldForAuthorization(
     label: String,
     text: String,
-    typeOfKeyboard: KeyboardType,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    typeOfKeyboard: KeyboardType
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -30,9 +32,7 @@ fun TextFieldForAuthorization(
     OutlinedTextField(
         modifier = Modifier.padding(10.dp),
         value = text.takeIf { it.isNotEmpty() }?.toString() ?: "",
-        onValueChange = {
-            onValueChange(it)
-        },
+        onValueChange = { onValueChange(it.take(25)) },
         label = {
             Text(
                 text = label,
@@ -53,6 +53,9 @@ fun TextFieldForAuthorization(
                 keyboardController?.hide()
                 focusManager.clearFocus()
             }
-        )
+        ),
+        visualTransformation =
+        if (typeOfKeyboard == KeyboardType.Password) PasswordVisualTransformation()
+        else VisualTransformation.None
     )
 }

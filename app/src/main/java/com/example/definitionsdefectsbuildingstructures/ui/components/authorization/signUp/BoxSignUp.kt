@@ -5,10 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,25 +14,15 @@ import androidx.compose.ui.unit.dp
 import com.example.definitionsdefectsbuildingstructures.R
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.generalForAuthorization.CreateButtonForAuthorization
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.generalForAuthorization.TextFieldForAuthorization
+import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.signUp.SignUpViewModel
+import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.signUp.actions.SignUpAction
 
 @Composable
 fun BoxSignUp(
+    uiState : SignUpViewModel.SignUpUiState,
+    uiAction: (SignUpAction) -> Unit,
     onRegistrationClick: () -> Unit = {}
 ) {
-    var email by remember { mutableStateOf("") }
-    var phoneNum by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
-    var patronymic by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var allFieldsFilled by remember { mutableStateOf(false) }
-
-    fun checkAllFieldsFilled() {
-        allFieldsFilled =
-            email.isNotEmpty() && password.isNotEmpty() && phoneNum.isNotEmpty()
-                    && name.isNotEmpty() && surname.isNotEmpty() && patronymic.isNotEmpty()
-    }
-
     Column(
         modifier = Modifier
             .border(2.dp, Color.Black),
@@ -45,63 +31,63 @@ fun BoxSignUp(
 
         TextFieldForAuthorization(
             label = stringResource(id = R.string.email),
-            text = email,
+            text = uiState.email,
+            onValueChange = { text ->
+                uiAction(SignUpAction.UpdateEmail(text))
+            },
             typeOfKeyboard = KeyboardType.Email
-        ) {
-            email = it
-            checkAllFieldsFilled()
-        }
+        )
 
         TextFieldForAuthorization(
             label = stringResource(id = R.string.phone_number),
-            text = phoneNum,
+            text = uiState.phoneNum,
+            onValueChange = { text ->
+                uiAction(SignUpAction.UpdatePhoneNum(text))
+            },
             typeOfKeyboard = KeyboardType.Phone
-        ) {
-            phoneNum = it
-            checkAllFieldsFilled()
-        }
+        )
 
         TextFieldForAuthorization(
             label = stringResource(id = R.string.name),
-            text = name,
+            text = uiState.name,
+            onValueChange = { text ->
+                uiAction(SignUpAction.UpdateName(text))
+            },
             typeOfKeyboard = KeyboardType.Text
-        ) {
-            name = it
-            checkAllFieldsFilled()
-        }
+        )
 
         TextFieldForAuthorization(
             label = stringResource(id = R.string.surname),
-            text = surname,
+            text = uiState.surname,
+            onValueChange = { text ->
+                uiAction(SignUpAction.UpdateSurname(text))
+            },
             typeOfKeyboard = KeyboardType.Text
-        ) {
-            surname = it
-            checkAllFieldsFilled()
-        }
+        )
 
         TextFieldForAuthorization(
             label = stringResource(id = R.string.patronymic),
-            text = patronymic,
+            text = uiState.patronymic,
+            onValueChange = { text ->
+                uiAction(SignUpAction.UpdatePatronymic(text))
+            },
             typeOfKeyboard = KeyboardType.Text
-        ) {
-            patronymic = it
-            checkAllFieldsFilled()
-        }
+        )
 
         TextFieldForAuthorization(
             label = stringResource(id = R.string.password),
-            text = password,
+            text = uiState.password,
+            onValueChange = { text ->
+                uiAction(SignUpAction.UpdatePassword(text))
+            },
             typeOfKeyboard = KeyboardType.Password
-        ) {
-            password = it
-            checkAllFieldsFilled()
-        }
+        )
         Box(
             modifier = Modifier.padding(10.dp)
         ) {
             CreateButtonForAuthorization(
                 text = stringResource(id = R.string.registration),
-                allFieldsFilled,
+                true,
                 onRegistrationClick
             )
         }

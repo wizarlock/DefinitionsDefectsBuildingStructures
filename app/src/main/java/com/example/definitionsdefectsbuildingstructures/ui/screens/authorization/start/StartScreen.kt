@@ -10,7 +10,6 @@ import com.example.definitionsdefectsbuildingstructures.data.navigation.LogIn
 import com.example.definitionsdefectsbuildingstructures.data.navigation.SignUp
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start.ActionButtons
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start.LogoAndName
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun StartScreen(

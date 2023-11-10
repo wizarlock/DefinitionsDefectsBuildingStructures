@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import com.example.definitionsdefectsbuildingstructures.R
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.generalForAuthorization.CreateButtonForAuthorization
 
-
 @Preview
 @Composable
 fun ActionButtons(
