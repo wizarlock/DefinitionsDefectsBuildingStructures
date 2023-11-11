@@ -23,4 +23,7 @@
     <string name="incorrect_surname">Введите корректную фамилию</string>
     <string name="incorrect_name">Введите корректное имя</string>
     <string name="incorrect_patronymic">Введите корректное отчество</string>
+    <string name="project_name">Название проекта</string>
+    <string name="save">Сохранить</string>
+    <string name="incorrect_project_name">Введите корректное название проекта</string>
 </resources>

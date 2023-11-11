@@ -16,6 +16,10 @@ object Recovery : Destination {
     override val route: String = "recovery"
 }
 
-object Projects : Destination {
+object ProjectsList : Destination {
     override val route: String = "projects"
+}
+
+object AddProject : Destination {
+    override val route: String = "addProject"
 }

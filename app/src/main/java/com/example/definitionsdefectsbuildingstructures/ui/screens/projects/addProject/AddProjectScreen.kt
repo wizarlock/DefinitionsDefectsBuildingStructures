@@ -1,4 +1,4 @@
-package com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.logIn
+package com.example.definitionsdefectsbuildingstructures.ui.screens.projects.addProject
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,15 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.ProjectsList
-import com.example.definitionsdefectsbuildingstructures.data.navigation.Recovery
-import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.logIn.BoxLogIn
-import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.logIn.LinkToRecovery
+import com.example.definitionsdefectsbuildingstructures.ui.components.projects.addProject.BoxAddProject
 
 @Composable
-fun LogInScreen(
-    navController: NavHostController
-) {
-    val viewModel: LogInViewModel = hiltViewModel()
+fun AddProjectScreen(navController: NavHostController) {
+    val viewModel: AddProjectViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val uiStateBoolean by viewModel.uiStateBoolean.collectAsState()
 
@@ -28,12 +24,13 @@ fun LogInScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BoxLogIn(
+        BoxAddProject(
             uiState,
             uiStateBoolean,
             viewModel::onUiAction,
-            onEnteringClick = { if (viewModel.areFieldsValid()) navController.navigate(ProjectsList.route) { popUpTo(ProjectsList.route) } }
+            onSavingClick = {
+                if (viewModel.areFieldsValid()) navController.navigate(ProjectsList.route) { popUpTo(ProjectsList.route) }
+            }
         )
-        LinkToRecovery(onLinkClick = { navController.navigate(Recovery.route) })
     }
 }

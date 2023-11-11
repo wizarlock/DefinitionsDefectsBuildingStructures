@@ -1,4 +1,4 @@
-package com.example.definitionsdefectsbuildingstructures.ui.components.projects
+package com.example.definitionsdefectsbuildingstructures.ui.components.projects.listOfProjects
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -24,3 +24,5 @@ fun isValidFullName(name: String): Boolean {
     val pattern = Regex("^[А-Я][а-я]*$")
     return pattern.matches(name)
 }
+
+fun isValidProjectName(name: String): Boolean = name.isNotEmpty()
