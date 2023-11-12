@@ -27,4 +27,9 @@
     <string name="save">Сохранить</string>
     <string name="incorrect_project_name">Введите корректное название проекта</string>
     <string name="my_projects">Мои проекты</string>
+    <string name="drawings">Чертежи</string>
+    <string name="project_settings">Настройки проекта</string>
+    <string name="record_context">Запись контекста</string>
+    <string name="drawing_name">Название чертежа</string>
+    <string name="incorrect_drawing_name">Введите корректное название чертежа</string>
 </resources>

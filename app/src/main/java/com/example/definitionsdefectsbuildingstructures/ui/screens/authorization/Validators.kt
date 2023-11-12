@@ -25,4 +25,4 @@ fun isValidFullName(name: String): Boolean {
     return pattern.matches(name)
 }
 
-fun isValidProjectName(name: String): Boolean = name.isNotEmpty()
+fun isValidProjectOrDrawingName(name: String): Boolean = name.isNotEmpty()

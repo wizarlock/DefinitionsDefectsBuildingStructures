@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
+import com.example.definitionsdefectsbuildingstructures.data.navigation.AddDrawing
 import com.example.definitionsdefectsbuildingstructures.data.navigation.AddProject
 import com.example.definitionsdefectsbuildingstructures.data.navigation.Drawings
 import com.example.definitionsdefectsbuildingstructures.data.navigation.LogIn
@@ -16,7 +17,8 @@ import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization
 import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.recovery.RecoveryScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.signUp.SignUpScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.start.StartScreen
-import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.DrawingsScreen
+import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.addDrawing.AddDrawingScreen
+import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.DrawingsScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.projects.addProject.AddProjectScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.projects.projectsList.ProjectsListScreen
 
@@ -56,6 +58,9 @@ fun AppNavHost(
             DrawingsScreen(
                 navController = navController
             )
+        }
+        composable(AddDrawing.route) {
+            AddDrawingScreen(navController = navController)
         }
     }
 }
