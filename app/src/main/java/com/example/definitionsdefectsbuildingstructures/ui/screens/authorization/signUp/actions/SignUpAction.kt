@@ -6,5 +6,5 @@ sealed class SignUpAction {
     data class UpdateName(val name: String) : SignUpAction()
     data class UpdateSurname(val surname: String) : SignUpAction()
     data class UpdatePatronymic(val patronymic: String) : SignUpAction()
-    data class UpdatePassword(val password: String) :SignUpAction()
+    data class UpdatePassword(val password: String) : SignUpAction()
 }

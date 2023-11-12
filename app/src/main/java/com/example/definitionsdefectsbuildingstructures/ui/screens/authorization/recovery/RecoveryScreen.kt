@@ -30,7 +30,13 @@ fun RecoveryScreen(
             uiState,
             uiStateBoolean,
             viewModel::onUiAction,
-            onRecoveryClick = { if (viewModel.areFieldsValid()) navController.navigate(LogIn.route) { popUpTo(LogIn.route) } }
+            onRecoveryClick = {
+                if (viewModel.areFieldsValid()) navController.navigate(LogIn.route) {
+                    popUpTo(
+                        LogIn.route
+                    )
+                }
+            }
         )
     }
 }

@@ -24,15 +24,6 @@ class AddDrawingViewModel @Inject constructor(
     private val _uiStateBoolean = MutableStateFlow(AddDrawingUiStateBoolean())
     val uiStateBoolean = _uiStateBoolean.asStateFlow()
 
-    init {
-        _uiState.update {
-            uiState.value.copy(
-                projectId = repository.currentProject.id
-            )
-        }
-    }
-
-
     fun onUiAction(action: AddDrawingAction) {
         when (action) {
             is AddDrawingAction.UpdateDrawingName -> _uiState.update {
@@ -64,7 +55,6 @@ class AddDrawingViewModel @Inject constructor(
     )
 
     data class AddDrawingUiState(
-        val projectId: String = "",
         val drawingName: String = ""
     )
 }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): ViewModel() {
+class SignUpViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -21,22 +21,27 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     val uiStateBoolean = _uiStateBoolean.asStateFlow()
 
     fun onUiAction(action: SignUpAction) {
-        when(action) {
+        when (action) {
             is SignUpAction.UpdateEmail -> _uiState.update {
                 uiState.value.copy(email = action.email)
             }
+
             is SignUpAction.UpdatePhoneNum -> _uiState.update {
                 uiState.value.copy(phoneNum = action.phoneNum)
             }
+
             is SignUpAction.UpdateName -> _uiState.update {
                 uiState.value.copy(name = action.name)
             }
+
             is SignUpAction.UpdateSurname -> _uiState.update {
                 uiState.value.copy(surname = action.surname)
             }
+
             is SignUpAction.UpdatePatronymic -> _uiState.update {
                 uiState.value.copy(patronymic = action.patronymic)
             }
+
             is SignUpAction.UpdatePassword -> _uiState.update {
                 uiState.value.copy(password = action.password)
             }

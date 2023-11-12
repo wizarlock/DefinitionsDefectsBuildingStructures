@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 
 @Composable
-fun ProjectCard (
+fun ProjectCard(
     projectItem: ProjectItem,
     onCardClick: () -> Unit = {}
 ) {
@@ -41,7 +41,7 @@ fun ProjectCard (
                 .padding(16.dp)
         ) {
             Text(
-                text =  projectItem.name,
+                text = projectItem.name,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,

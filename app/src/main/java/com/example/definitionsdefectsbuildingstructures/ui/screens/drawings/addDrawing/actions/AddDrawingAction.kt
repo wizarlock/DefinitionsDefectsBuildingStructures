@@ -2,5 +2,5 @@ package com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.add
 
 sealed class AddDrawingAction {
     data class UpdateDrawingName(val name: String) : AddDrawingAction()
-    object SaveDrawing: AddDrawingAction()
+    object SaveDrawing : AddDrawingAction()
 }

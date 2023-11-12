@@ -27,6 +27,7 @@ class Repository @Inject constructor() : RepositoryInterface {
             }
         }
     }
+
     override suspend fun getProject(id: String) = _projectItems.value.firstOrNull { it.id == id }
 
     override suspend fun addDrawing(drawingItem: DrawingItem) {

@@ -1,6 +1,5 @@
 package com.example.definitionsdefectsbuildingstructures.data.navigation
-import androidx.navigation.navArgument
-import androidx.navigation.NavType
+
 
 object Start : Destination {
     override val route: String = "start"
@@ -29,19 +28,6 @@ object AddProject : Destination {
 object Drawings : Destination {
     const val id = "id"
     override val route: String = "drawings"
-
-    const val routeWithArgs = "drawings/{id}"
-
-    val arguments = listOf(
-        navArgument(id) {
-            type = NavType.StringType
-        }
-    )
-    fun navToOrderWithArgs(
-        id: String = ""
-    ): String {
-        return "$route/$id"
-    }
 }
 
 object AddDrawing : Destination {

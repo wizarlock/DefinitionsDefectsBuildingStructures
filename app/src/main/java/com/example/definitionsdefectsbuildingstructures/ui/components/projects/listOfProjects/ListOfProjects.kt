@@ -7,14 +7,18 @@ import androidx.compose.foundation.lazy.items
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 
 @Composable
-fun ListOfProjects(paddingValues: PaddingValues, projects: List<ProjectItem>, onCardClick: (String) -> Unit) {
+fun ListOfProjects(
+    paddingValues: PaddingValues,
+    projects: List<ProjectItem>,
+    onCardClick: (ProjectItem) -> Unit
+) {
     LazyColumn(
         contentPadding = paddingValues
     ) {
         items(projects) { project ->
             ProjectCard(
                 projectItem = project,
-                onCardClick = { onCardClick(project.id) }
+                onCardClick = { onCardClick(project) }
             )
         }
     }

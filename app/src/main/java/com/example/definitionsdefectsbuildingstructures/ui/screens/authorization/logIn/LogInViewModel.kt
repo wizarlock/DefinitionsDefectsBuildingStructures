@@ -37,7 +37,7 @@ class LogInViewModel @Inject constructor() : ViewModel() {
             uiStateBoolean.value.copy(email = isValidEmail)
         }
         _uiStateBoolean.update {
-            uiStateBoolean.value.copy(password =  isValidPassword)
+            uiStateBoolean.value.copy(password = isValidPassword)
         }
         return isValidEmail && isValidPassword
     }

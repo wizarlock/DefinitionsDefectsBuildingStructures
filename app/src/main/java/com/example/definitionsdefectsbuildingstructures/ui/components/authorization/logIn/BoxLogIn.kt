@@ -21,7 +21,7 @@ import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization
 
 @Composable
 fun BoxLogIn(
-    uiState : LogInViewModel.LogInUiState,
+    uiState: LogInViewModel.LogInUiState,
     uiStateBoolean: LogInViewModel.LogInUiStateBoolean,
     uiAction: (LogInUiAction) -> Unit,
     onEnteringClick: () -> Unit = {}
@@ -42,7 +42,7 @@ fun BoxLogIn(
             },
             typeOfKeyboard = KeyboardType.Email
         )
-        
+
         if (!uiStateBoolean.email)
             Text(
                 text = stringResource(id = R.string.incorrect_email),

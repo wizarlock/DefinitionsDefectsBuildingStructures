@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class RecoveryViewModel @Inject constructor(): ViewModel() {
+class RecoveryViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(RecoveryUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -21,16 +21,19 @@ class RecoveryViewModel @Inject constructor(): ViewModel() {
     val uiStateBoolean = _uiStateBoolean.asStateFlow()
 
     fun onUiAction(action: RecoveryAction) {
-        when(action) {
-            is RecoveryAction.UpdateEmail-> _uiState.update {
+        when (action) {
+            is RecoveryAction.UpdateEmail -> _uiState.update {
                 uiState.value.copy(email = action.email)
             }
+
             is RecoveryAction.UpdatePhoneNum -> _uiState.update {
                 uiState.value.copy(phoneNum = action.phoneNum)
             }
+
             is RecoveryAction.UpdatePassword -> _uiState.update {
                 uiState.value.copy(password = action.password)
             }
+
             is RecoveryAction.UpdateRepeatPassword -> _uiState.update {
                 uiState.value.copy(repeatPassword = action.repeatPassword)
             }
@@ -40,7 +43,8 @@ class RecoveryViewModel @Inject constructor(): ViewModel() {
     fun areFieldsValid(): Boolean {
         val isValidEmail = isValidEmail(uiState.value.email)
         val isValidPassword = isValidPassword(uiState.value.password)
-        val isValidRepeatPassword = isValidRepeatPassword(uiState.value.password, uiState.value.repeatPassword)
+        val isValidRepeatPassword =
+            isValidRepeatPassword(uiState.value.password, uiState.value.repeatPassword)
         val isValidPhoneNum = isValidPhoneNum(uiState.value.phoneNum)
         _uiStateBoolean.update {
             uiStateBoolean.value.copy(email = isValidEmail)

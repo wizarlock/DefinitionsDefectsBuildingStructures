@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CreateButtonForAuthorization(text: String,  onClick: () -> Unit) {
+fun CreateButtonForAuthorization(text: String, onClick: () -> Unit) {
     Button(
         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
         onClick = onClick,

@@ -51,7 +51,10 @@ fun ProjectsListScreen(navController: NavHostController) {
             ListOfProjects(
                 paddingValues = paddingValues,
                 projects = viewModel.projects.collectAsState().value,
-                onCardClick = { projectId -> navController.navigate(Drawings.navToOrderWithArgs(projectId)) }
+                onCardClick = { project ->
+                    viewModel.updateProject(projectItem = project)
+                    navController.navigate(Drawings.route)
+                }
             )
         }
     }

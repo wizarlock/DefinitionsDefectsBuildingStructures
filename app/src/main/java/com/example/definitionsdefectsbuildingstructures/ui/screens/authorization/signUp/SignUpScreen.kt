@@ -30,7 +30,13 @@ fun SignUpScreen(
             uiState,
             uiStateBoolean,
             viewModel::onUiAction,
-            onRegistrationClick = { if (viewModel.areFieldsValid()) navController.navigate(Start.route) { popUpTo(Start.route) } }
+            onRegistrationClick = {
+                if (viewModel.areFieldsValid()) navController.navigate(Start.route) {
+                    popUpTo(
+                        Start.route
+                    )
+                }
+            }
         )
     }
 }

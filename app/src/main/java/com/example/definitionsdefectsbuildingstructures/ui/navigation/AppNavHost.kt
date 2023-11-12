@@ -54,15 +54,13 @@ fun AppNavHost(
         composable(AddProject.route) {
             AddProjectScreen(navController = navController)
         }
-        composable(Drawings.routeWithArgs, arguments = Drawings.arguments) {
-            DrawingsScreen(
-                navController = navController
-            )
+
+        composable(Drawings.route) {
+            DrawingsScreen(navController = navController)
         }
+
         composable(AddDrawing.route) {
-            AddDrawingScreen(
-                navController = navController
-            )
+            AddDrawingScreen(navController = navController)
         }
     }
 }
