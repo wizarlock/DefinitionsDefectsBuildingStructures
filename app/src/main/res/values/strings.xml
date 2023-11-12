@@ -26,4 +26,5 @@
     <string name="project_name">Название проекта</string>
     <string name="save">Сохранить</string>
     <string name="incorrect_project_name">Введите корректное название проекта</string>
+    <string name="my_projects">Мои проекты</string>
 </resources>

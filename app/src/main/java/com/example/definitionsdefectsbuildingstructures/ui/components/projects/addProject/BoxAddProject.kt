@@ -53,11 +53,8 @@ fun BoxAddProject(
             modifier = Modifier.padding(10.dp)
         ) {
             CreateButtonForAuthorization(
-                text = stringResource(id = R.string.save)
-            ) {
-                uiAction(AddProjectAction.SaveProject)
-                onSavingClick()
-            }
+                text = stringResource(id = R.string.save), onSavingClick
+            )
         }
     }
 }

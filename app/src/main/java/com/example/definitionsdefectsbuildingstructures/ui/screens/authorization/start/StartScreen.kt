@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.LogIn
 import com.example.definitionsdefectsbuildingstructures.data.navigation.SignUp
+import com.example.definitionsdefectsbuildingstructures.data.navigation.navigateSingleTopToAndRetainState
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start.ActionButtons
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start.LogoAndName
 
@@ -15,14 +16,16 @@ import com.example.definitionsdefectsbuildingstructures.ui.components.authorizat
 fun StartScreen(
     navController: NavHostController
 ) {
-    Column (
+    Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-            ){
+    ) {
         LogoAndName()
         ActionButtons(
-            onLogInClick = { navController.navigate(LogIn.route) },
-            onSignUpClick = { navController.navigate(SignUp.route) }
+            onLogInClick = {
+                navController.navigateSingleTopToAndRetainState(LogIn.route)
+            },
+            onSignUpClick = { navController.navigateSingleTopToAndRetainState(SignUp.route) }
         )
     }
 }

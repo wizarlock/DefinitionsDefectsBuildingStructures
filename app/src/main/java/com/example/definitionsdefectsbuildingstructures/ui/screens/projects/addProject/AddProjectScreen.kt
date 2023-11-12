@@ -12,6 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.ProjectsList
 import com.example.definitionsdefectsbuildingstructures.ui.components.projects.addProject.BoxAddProject
+import com.example.definitionsdefectsbuildingstructures.ui.screens.projects.addProject.actions.AddProjectAction
 
 @Composable
 fun AddProjectScreen(navController: NavHostController) {
@@ -29,7 +30,10 @@ fun AddProjectScreen(navController: NavHostController) {
             uiStateBoolean,
             viewModel::onUiAction,
             onSavingClick = {
-                if (viewModel.areFieldsValid()) navController.navigate(ProjectsList.route) { popUpTo(ProjectsList.route) }
+                if (viewModel.areFieldsValid()) {
+                    viewModel.onUiAction(AddProjectAction.SaveProject)
+                    navController.navigate(ProjectsList.route) { popUpTo(ProjectsList.route) }
+                }
             }
         )
     }
