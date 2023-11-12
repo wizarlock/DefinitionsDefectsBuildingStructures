@@ -29,6 +29,8 @@ class DrawingViewModel @Inject constructor(
             repository.getProject(id)?.let { item ->
                 projectItem = item
 
+                repository.currentProject = item
+
                 _uiState.update {
                     uiState.value.copy(
                         projectName = item.name

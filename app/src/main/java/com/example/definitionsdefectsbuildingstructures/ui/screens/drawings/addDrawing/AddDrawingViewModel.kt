@@ -16,13 +16,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddDrawingViewModel @Inject constructor(
-    private val repository: RepositoryInterface
+    private val repository: RepositoryInterface,
 ) : ViewModel() {
     private var drawingItem = DrawingItem()
     private val _uiState = MutableStateFlow(AddDrawingUiState())
     val uiState = _uiState.asStateFlow()
     private val _uiStateBoolean = MutableStateFlow(AddDrawingUiStateBoolean())
     val uiStateBoolean = _uiStateBoolean.asStateFlow()
+
+    init {
+        _uiState.update {
+            uiState.value.copy(
+                projectId = repository.currentProject.id
+            )
+        }
+    }
+
 
     fun onUiAction(action: AddDrawingAction) {
         when (action) {
@@ -37,7 +46,7 @@ class AddDrawingViewModel @Inject constructor(
     private fun saveDrawing() {
         drawingItem.name = uiState.value.drawingName
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addDrawing(drawingItem)
+            repository.addDrawing(drawingItem = drawingItem)
         }
     }
 
@@ -55,6 +64,7 @@ class AddDrawingViewModel @Inject constructor(
     )
 
     data class AddDrawingUiState(
+        val projectId: String = "",
         val drawingName: String = ""
     )
 }

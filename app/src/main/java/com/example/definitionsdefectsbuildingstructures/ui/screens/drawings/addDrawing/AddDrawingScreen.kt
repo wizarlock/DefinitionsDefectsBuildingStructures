@@ -32,7 +32,7 @@ fun AddDrawingScreen(navController: NavHostController) {
             onSavingClick = {
                 if (viewModel.areFieldsValid()) {
                     viewModel.onUiAction(AddDrawingAction.SaveDrawing)
-                    navController.navigate(Drawings.route) { popUpTo(Drawings.route) }
+                    navController.navigate(Drawings.navToOrderWithArgs(uiState.projectId)) { popUpTo(Drawings.route) }
                 }
             }
         )

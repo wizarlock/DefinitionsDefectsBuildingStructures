@@ -60,7 +60,9 @@ fun AppNavHost(
             )
         }
         composable(AddDrawing.route) {
-            AddDrawingScreen(navController = navController)
+            AddDrawingScreen(
+                navController = navController
+            )
         }
     }
 }
