@@ -46,7 +46,7 @@ fun ProjectsListScreen(navController: NavHostController) {
             Text(
                 text = stringResource(id = R.string.my_projects),
                 textAlign = TextAlign.Center,
-                fontSize = 24.sp
+                fontSize = 25.sp
             )
             ListOfProjects(
                 paddingValues = paddingValues,

@@ -1,5 +1,6 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -46,20 +47,21 @@ fun DrawingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = 20.dp, end = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(start = 20.dp, end = 20.dp, bottom = 100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = uiState.projectName,
                 textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                modifier = Modifier
+                fontSize = 25.sp
             )
 
             SelectDrawing(
                 list = uiState.drawings.collectAsState().value,
                 paddingValues = paddingValues
             )
+
             SettingsProjectButton(onClick = {})
             RecordContextButton(onClick = {})
         }

@@ -19,6 +19,7 @@ import com.example.definitionsdefectsbuildingstructures.ui.components.authorizat
 import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.addDrawing.AddDrawingViewModel
 import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.addDrawing.actions.AddDrawingAction
 
+
 @Composable
 fun BoxAddDrawing(
     uiState: AddDrawingViewModel.AddDrawingUiState,
@@ -31,7 +32,6 @@ fun BoxAddDrawing(
             .border(2.dp, Color.Black),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         TextFieldForAuthorization(
             label = stringResource(id = R.string.drawing_name),
             text = uiState.drawingName,
@@ -45,6 +45,21 @@ fun BoxAddDrawing(
         if (!uiStateBoolean.drawingName)
             Text(
                 text = stringResource(id = R.string.incorrect_drawing_name),
+                fontSize = 10.sp,
+                color = Color.Red
+            )
+
+        ClickableTextField(
+            loadFile = { uri ->
+                uiAction(AddDrawingAction.UpdateSelectedFile(uri))
+            },
+            isValid = uiStateBoolean.isFileExists,
+            isFilled = uiState.drawingFileUri != null
+        )
+
+        if (!uiStateBoolean.isFileExists)
+            Text(
+                text = stringResource(id = R.string.incorrect_drawing_file),
                 fontSize = 10.sp,
                 color = Color.Red
             )

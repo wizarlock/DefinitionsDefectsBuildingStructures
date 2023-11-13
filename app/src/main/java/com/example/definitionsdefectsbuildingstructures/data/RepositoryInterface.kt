@@ -1,5 +1,6 @@
 package com.example.definitionsdefectsbuildingstructures.data
 
+import android.net.Uri
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import kotlinx.coroutines.flow.StateFlow
@@ -19,4 +20,5 @@ interface RepositoryInterface {
 
     suspend fun removeDrawing(drawingId: String)
 
+    suspend fun loadDrawing(uri: Uri?): Boolean
 }

@@ -23,7 +23,7 @@ fun RecordContextButton(onClick: () -> Unit) {
         shape = CircleShape,
         border = BorderStroke(2.dp, Color.Black),
         modifier = Modifier
-            .widthIn(min = 240.dp)
+            .widthIn(min = 300.dp)
             .padding(top = 10.dp)
     ) {
         Text(

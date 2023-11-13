@@ -6,15 +6,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.definitionsdefectsbuildingstructures.R
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 
@@ -43,29 +46,40 @@ fun SelectDrawing(
     ) {
         Column {
             OutlinedTextField(
-                value = "selected",
+                value = if (list.isEmpty()) stringResource(id = R.string.drawings_empty) else stringResource(
+                    id = R.string.select_drawing
+                ),
                 onValueChange = { },
-                label = { Text(text = stringResource(id = R.string.drawings)) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.requiredWidth(300.dp),
                 trailingIcon = { Icon(Icons.Default.ArrowDropDown, null) },
-                readOnly = true
+                readOnly = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    cursorColor = Color.Black,
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                ),
+                textStyle = TextStyle(fontSize = 25.sp)
             )
             DropdownMenu(
-                expanded = expanded,
+                expanded = expanded && list.isNotEmpty(),
                 onDismissRequest = { expanded = false },
-            ) {
+                modifier = Modifier
+                    .requiredWidth(300.dp)
+                    .heightIn(max = 370.dp)
+                ) {
                 list.forEach { entry ->
                     DropdownMenuItem(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.requiredWidth(300.dp),
                         onClick = {
                             expanded = false
                         },
                         text = {
                             Text(
                                 text = entry.name,
+                                fontSize = 25.sp,
                                 modifier = Modifier
-                                    .wrapContentSize()
                                     .align(Alignment.Start)
+
                             )
                         }
                     )

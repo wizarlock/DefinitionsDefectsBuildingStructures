@@ -1,5 +1,6 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.addDrawing
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.definitionsdefectsbuildingstructures.data.RepositoryInterface
@@ -26,8 +27,21 @@ class AddDrawingViewModel @Inject constructor(
 
     fun onUiAction(action: AddDrawingAction) {
         when (action) {
-            is AddDrawingAction.UpdateDrawingName -> _uiState.update {
-                uiState.value.copy(drawingName = action.name)
+            is AddDrawingAction.UpdateDrawingName -> {
+                _uiState.update {
+                    uiState.value.copy(drawingName = action.name)
+                }
+            }
+
+            is AddDrawingAction.UpdateSelectedFile -> {
+                viewModelScope.launch {
+                    val isFileExists = repository.loadDrawing(uri = action.uri)
+                    if (isFileExists) {
+                        _uiState.update {
+                            uiState.value.copy(drawingFileUri = action.uri)
+                        }
+                    }
+                }
             }
 
             AddDrawingAction.SaveDrawing -> saveDrawing()
@@ -43,18 +57,23 @@ class AddDrawingViewModel @Inject constructor(
 
     fun areFieldsValid(): Boolean {
         val isValidDrawingName = isValidProjectOrDrawingName(uiState.value.drawingName)
+        val isFileLoaded = uiState.value.drawingFileUri != null
         _uiStateBoolean.update {
             uiStateBoolean.value.copy(drawingName = isValidDrawingName)
         }
-
-        return isValidDrawingName
+        _uiStateBoolean.update {
+            uiStateBoolean.value.copy(isFileExists = isFileLoaded)
+        }
+        return isValidDrawingName && isFileLoaded
     }
 
     data class AddDrawingUiStateBoolean(
-        val drawingName: Boolean = true
+        val drawingName: Boolean = true,
+        val isFileExists: Boolean = true
     )
 
     data class AddDrawingUiState(
-        val drawingName: String = ""
+        val drawingName: String = "",
+        val drawingFileUri: Uri? = null
     )
 }
