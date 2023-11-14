@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.AddDrawing
+import com.example.definitionsdefectsbuildingstructures.data.navigation.WorkWithDrawing
 import com.example.definitionsdefectsbuildingstructures.ui.components.app.MyBotAppBar
 import com.example.definitionsdefectsbuildingstructures.ui.components.app.MyTopAppBar
 import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.RecordContextButton
@@ -62,7 +63,7 @@ fun DrawingsScreen(
                 paddingValues = paddingValues
             )
 
-            SettingsProjectButton(onClick = {})
+            SettingsProjectButton(onClick = { navController.navigate(WorkWithDrawing.route) })
             RecordContextButton(onClick = {})
         }
     }

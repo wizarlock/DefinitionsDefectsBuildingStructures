@@ -34,3 +34,8 @@ object AddDrawing : Destination {
     const val id = "id"
     override val route: String = "addDrawing"
 }
+
+object WorkWithDrawing : Destination {
+    const val id = "id"
+    override val route: String = "workWithDrawing"
+}

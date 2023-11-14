@@ -21,4 +21,6 @@ interface RepositoryInterface {
     suspend fun removeDrawing(drawingId: String)
 
     suspend fun loadDrawing(uri: Uri?): Boolean
+
+    fun convertPdfPageToPng()
 }

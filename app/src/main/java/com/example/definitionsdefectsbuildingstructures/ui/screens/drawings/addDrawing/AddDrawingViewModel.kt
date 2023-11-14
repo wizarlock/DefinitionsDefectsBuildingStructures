@@ -47,7 +47,6 @@ class AddDrawingViewModel @Inject constructor(
             AddDrawingAction.SaveDrawing -> saveDrawing()
         }
     }
-
     private fun saveDrawing() {
         drawingItem.name = uiState.value.drawingName
         viewModelScope.launch(Dispatchers.IO) {

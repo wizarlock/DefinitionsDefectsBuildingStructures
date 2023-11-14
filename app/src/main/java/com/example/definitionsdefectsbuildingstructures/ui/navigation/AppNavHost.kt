@@ -13,6 +13,7 @@ import com.example.definitionsdefectsbuildingstructures.data.navigation.Projects
 import com.example.definitionsdefectsbuildingstructures.data.navigation.Recovery
 import com.example.definitionsdefectsbuildingstructures.data.navigation.SignUp
 import com.example.definitionsdefectsbuildingstructures.data.navigation.Start
+import com.example.definitionsdefectsbuildingstructures.data.navigation.WorkWithDrawing
 import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.logIn.LogInScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.recovery.RecoveryScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.authorization.signUp.SignUpScreen
@@ -21,6 +22,7 @@ import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.addD
 import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.DrawingsScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.projects.addProject.AddProjectScreen
 import com.example.definitionsdefectsbuildingstructures.ui.screens.projects.projectsList.ProjectsListScreen
+import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.WorkWithDrawingScreen
 
 @Composable
 fun AppNavHost(
@@ -61,6 +63,10 @@ fun AppNavHost(
 
         composable(AddDrawing.route) {
             AddDrawingScreen(navController = navController)
+        }
+
+        composable(WorkWithDrawing.route) {
+            WorkWithDrawingScreen(navController = navController)
         }
     }
 }

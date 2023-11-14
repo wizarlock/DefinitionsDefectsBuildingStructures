@@ -1,7 +1,13 @@
 package com.example.definitionsdefectsbuildingstructures.data
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.graphics.Rect
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
+import android.os.Environment
+import android.os.ParcelFileDescriptor
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -76,5 +82,51 @@ class Repository @Inject constructor(
             }
         }
         return false
+    }
+
+    override fun convertPdfPageToPng() {
+        try {
+            val outputDir = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+
+            val parcelFileDescriptor = ParcelFileDescriptor.open(_pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            val pdfRenderer = PdfRenderer(parcelFileDescriptor)
+
+            // Получение первой страницы PDF
+            val pdfPage: PdfRenderer.Page = pdfRenderer.openPage(0)
+
+            // Создание Bitmap для рендеринга страницы PDF
+            val bitmap: Bitmap = Bitmap.createBitmap(pdfPage.width, pdfPage.height, Bitmap.Config.ARGB_8888)
+
+            // Рендеринг страницы PDF в Bitmap
+            pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+
+            // Создание файла для сохранения изображения
+            val outputFileName = "output_page1.png"
+            val outputFile = File(outputDir, outputFileName)
+
+            // Сохранение изображения в файл
+            saveBitmapToFile(bitmap, outputFile)
+
+            // Закрываем страницу и PdfRenderer
+            pdfPage.close()
+            pdfRenderer.close()
+
+            println("PDF успешно преобразован в изображение и сохранен в файле: ${outputFile.absolutePath}")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("Не удалось преобразовать PDF в изображение.")
+        }
+    }
+
+    // Функция для сохранения Bitmap в файл
+    @Throws(IOException::class)
+    private fun saveBitmapToFile(bitmap: Bitmap, outputFile: File) {
+        val outputStream = FileOutputStream(outputFile)
+        try {
+            // Используйте метод compress с PNG, чтобы избежать потери данных
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        } finally {
+            outputStream.close()
+        }
     }
 }
