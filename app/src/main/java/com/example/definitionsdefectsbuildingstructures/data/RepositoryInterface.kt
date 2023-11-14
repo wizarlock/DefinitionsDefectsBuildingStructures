@@ -4,11 +4,14 @@ import android.net.Uri
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import kotlinx.coroutines.flow.StateFlow
+import java.io.File
 
 interface RepositoryInterface {
     val projectItems: StateFlow<List<ProjectItem>>
 
     var currentProject: ProjectItem
+
+    var pdfFile: File?
 
     suspend fun addProject(projectItem: ProjectItem)
 

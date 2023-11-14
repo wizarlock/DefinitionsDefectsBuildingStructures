@@ -25,9 +25,10 @@ class Repository @Inject constructor(
     @ApplicationContext private val applicationContext: Context
 ) : RepositoryInterface {
     private val _projectItems: MutableStateFlow<List<ProjectItem>> = MutableStateFlow(listOf())
-    private var _pdfFile: File? = null
+    override var pdfFile: File? = null
     override val projectItems = _projectItems.asStateFlow()
     override var currentProject = ProjectItem()
+
     override suspend fun addProject(projectItem: ProjectItem) {
         _projectItems.update { currentList ->
             val updatedList = currentList.toMutableList()
@@ -67,11 +68,11 @@ class Repository @Inject constructor(
     override suspend fun loadDrawing(uri: Uri?): Boolean {
         if (uri != null) {
             try {
-                _pdfFile = withContext(Dispatchers.IO) {
+                pdfFile = withContext(Dispatchers.IO) {
                     File.createTempFile("output", ".pdf", applicationContext.cacheDir)
                 }
                 applicationContext.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val outputStream = FileOutputStream(_pdfFile)
+                    val outputStream = FileOutputStream(pdfFile)
                     inputStream.copyTo(outputStream)
                     outputStream.close()
 
@@ -88,7 +89,7 @@ class Repository @Inject constructor(
         try {
             val outputDir = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
 
-            val parcelFileDescriptor = ParcelFileDescriptor.open(_pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            val parcelFileDescriptor = ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
             val pdfRenderer = PdfRenderer(parcelFileDescriptor)
 
             // Получение первой страницы PDF
