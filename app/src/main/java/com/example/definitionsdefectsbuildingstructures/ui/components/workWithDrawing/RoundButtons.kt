@@ -6,13 +6,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
+
 @Composable
 fun RoundButtons() {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Center
     ) {
-        RoundButton("Аудио режим")
-        RoundButton("Фото режим")
+        AudioButton(
+            onButtonClick = {},
+
+        )
+        PhotoButton(
+            onButtonClick = {}
+        )
     }
 }

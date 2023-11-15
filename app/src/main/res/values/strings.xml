@@ -37,4 +37,10 @@
     <string name="add_drawing">Прикрепите чертеж</string>
     <string name="incorrect_drawing_file">Прикрепите один .pdf файл</string>
     <string name="loaded_drawing">Чертеж прикреплен</string>
+    <string name="audio_mode">Аудио \n режим</string>
+    <string name="photo_mode">Фото \n режим</string>
+    <string name="photo_mode_on">Вкл</string>
+    <string name="photo_mode_off">Выкл</string>
+    <string name="audio_mode_off">start</string>
+    <string name="audio_mode_on">stop</string>
 </resources>
