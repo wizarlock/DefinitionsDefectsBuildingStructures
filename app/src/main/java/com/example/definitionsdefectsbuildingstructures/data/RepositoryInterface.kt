@@ -4,14 +4,13 @@ import android.net.Uri
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import kotlinx.coroutines.flow.StateFlow
-import java.io.File
 
 interface RepositoryInterface {
     val projectItems: StateFlow<List<ProjectItem>>
 
     var currentProject: ProjectItem
 
-    var pdfFile: File?
+    var currentDrawing: DrawingItem
 
     suspend fun addProject(projectItem: ProjectItem)
 
@@ -25,5 +24,5 @@ interface RepositoryInterface {
 
     suspend fun loadDrawing(uri: Uri?): Boolean
 
-    fun convertPdfPageToPng()
+    fun convertPdfPageToPng(drawingItem: DrawingItem)
 }

@@ -20,6 +20,10 @@ class DrawingViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
     private var projectItem = ProjectItem()
 
+    fun updateDrawing(drawingItem: DrawingItem) {
+        repository.currentDrawing = drawingItem
+    }
+
     init {
         viewModelScope.launch {
             projectItem = repository.currentProject

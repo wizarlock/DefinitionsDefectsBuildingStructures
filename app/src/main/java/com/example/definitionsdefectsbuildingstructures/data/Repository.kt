@@ -2,8 +2,6 @@ package com.example.definitionsdefectsbuildingstructures.data
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Matrix
-import android.graphics.Rect
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Environment
@@ -25,9 +23,10 @@ class Repository @Inject constructor(
     @ApplicationContext private val applicationContext: Context
 ) : RepositoryInterface {
     private val _projectItems: MutableStateFlow<List<ProjectItem>> = MutableStateFlow(listOf())
-    override var pdfFile: File? = null
+    private var _pdfFile: File? = null
     override val projectItems = _projectItems.asStateFlow()
     override var currentProject = ProjectItem()
+    override var currentDrawing = DrawingItem()
 
     override suspend fun addProject(projectItem: ProjectItem) {
         _projectItems.update { currentList ->
@@ -68,14 +67,13 @@ class Repository @Inject constructor(
     override suspend fun loadDrawing(uri: Uri?): Boolean {
         if (uri != null) {
             try {
-                pdfFile = withContext(Dispatchers.IO) {
+                _pdfFile = withContext(Dispatchers.IO) {
                     File.createTempFile("output", ".pdf", applicationContext.cacheDir)
                 }
                 applicationContext.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val outputStream = FileOutputStream(pdfFile)
+                    val outputStream = FileOutputStream(_pdfFile)
                     inputStream.copyTo(outputStream)
                     outputStream.close()
-
                     return true
                 }
             } catch (e: IOException) {
@@ -85,11 +83,11 @@ class Repository @Inject constructor(
         return false
     }
 
-    override fun convertPdfPageToPng() {
+    override fun convertPdfPageToPng(drawingItem: DrawingItem) {
         try {
             val outputDir = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
 
-            val parcelFileDescriptor = ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            val parcelFileDescriptor = ParcelFileDescriptor.open(_pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
             val pdfRenderer = PdfRenderer(parcelFileDescriptor)
 
             // Получение первой страницы PDF
@@ -102,7 +100,7 @@ class Repository @Inject constructor(
             pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
             // Создание файла для сохранения изображения
-            val outputFileName = "output_page1.png"
+            val outputFileName = "${drawingItem.fileName}.png"
             val outputFile = File(outputDir, outputFileName)
 
             // Сохранение изображения в файл

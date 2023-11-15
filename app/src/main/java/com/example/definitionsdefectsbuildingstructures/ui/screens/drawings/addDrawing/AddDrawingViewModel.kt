@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +25,7 @@ class AddDrawingViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
     private val _uiStateBoolean = MutableStateFlow(AddDrawingUiStateBoolean())
     val uiStateBoolean = _uiStateBoolean.asStateFlow()
-
+    fun test() { repository.convertPdfPageToPng(drawingItem) }
     fun onUiAction(action: AddDrawingAction) {
         when (action) {
             is AddDrawingAction.UpdateDrawingName -> {
@@ -49,6 +50,7 @@ class AddDrawingViewModel @Inject constructor(
     }
     private fun saveDrawing() {
         drawingItem.name = uiState.value.drawingName
+        drawingItem.fileName = UUID.randomUUID().toString()
         viewModelScope.launch(Dispatchers.IO) {
             repository.addDrawing(drawingItem = drawingItem)
         }

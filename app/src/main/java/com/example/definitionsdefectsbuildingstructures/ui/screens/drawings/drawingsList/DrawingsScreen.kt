@@ -60,10 +60,14 @@ fun DrawingsScreen(
 
             SelectDrawing(
                 list = uiState.drawings.collectAsState().value,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                onDrawingClick = { drawing ->
+                    viewModel.updateDrawing(drawingItem = drawing)
+                    navController.navigate(WorkWithDrawing.route)
+                }
             )
 
-            SettingsProjectButton(onClick = { navController.navigate(WorkWithDrawing.route) })
+            SettingsProjectButton(onClick = {})
             RecordContextButton(onClick = {})
         }
     }

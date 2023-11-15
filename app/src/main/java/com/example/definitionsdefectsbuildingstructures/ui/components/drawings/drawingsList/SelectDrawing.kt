@@ -35,7 +35,8 @@ import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 @Composable
 fun SelectDrawing(
     list: List<DrawingItem>,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onDrawingClick: (DrawingItem) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -72,6 +73,7 @@ fun SelectDrawing(
                         modifier = Modifier.requiredWidth(300.dp),
                         onClick = {
                             expanded = false
+                            onDrawingClick(entry)
                         },
                         text = {
                             Text(
