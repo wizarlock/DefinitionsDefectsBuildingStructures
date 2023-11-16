@@ -22,14 +22,14 @@ import com.example.definitionsdefectsbuildingstructures.R
 
 @Composable
 fun PhotoButton(
-    onButtonClick: () -> Unit
+    onButtonClick: (Boolean) -> Unit
 ) {
     var clickCount by remember { mutableStateOf(0) }
     Button(
         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
         onClick = {
             clickCount++
-            onButtonClick()
+            onButtonClick(clickCount % 2 != 0)
         },
         shape = CircleShape,
         border = BorderStroke(2.dp, Color.Black),

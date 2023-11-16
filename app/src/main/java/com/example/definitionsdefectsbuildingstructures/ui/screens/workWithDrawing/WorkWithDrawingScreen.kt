@@ -1,5 +1,6 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDr
 
 @Composable
 fun WorkWithDrawingScreen(navController: NavHostController) {
+    var photoOn by remember { mutableStateOf(false) }
     val viewModel: WorkWithDrawingViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     Column(
@@ -26,8 +28,14 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ZoomableImage(uiState.fileName)
+        ZoomableImage(fileName = uiState.fileName, isZoomEnabled = photoOn)
         Spacer(modifier = Modifier.height(16.dp))
-        RoundButtons()
+        RoundButtons(
+            onAudioClick = {},
+            onPhotoClick = { bool ->
+                photoOn = bool
+                Log.e("HYYYYYYI", photoOn.toString())
+            }
+        )
     }
 }

@@ -24,36 +24,47 @@ import coil.request.ImageRequest
 
 @Composable
 fun ZoomableImage(
-    fileName: String
+    fileName: String,
+    isZoomEnabled: Boolean
 ) {
     val scale = remember { mutableStateOf(1f) }
     val offsetX = remember { mutableStateOf(0f) }
     val offsetY = remember { mutableStateOf(0f) }
 
-    Box(
-        modifier = Modifier
-            .clip(RectangleShape)
-            .fillMaxWidth()
-            .fillMaxHeight(0.75f)
-            .border(2.dp, Color.Black)
-            .background(Color.White)
-            .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, _ ->
-                    scale.value *= zoom
-                    offsetX.value = (offsetX.value + pan.x).coerceIn(-500f, 500f)
-                    offsetY.value = (offsetY.value + pan.y).coerceIn(-500f, 500f)
-                }
+    val baseModifier = Modifier
+        .clip(RectangleShape)
+        .fillMaxWidth()
+        .fillMaxHeight(0.75f)
+        .border(2.dp, Color.Black)
+        .background(Color.White)
+
+    val modifier: Modifier = if (!isZoomEnabled) {
+        baseModifier.pointerInput(Unit) {
+            detectTransformGestures { _, pan, zoom, _ ->
+                scale.value *= zoom
+                offsetX.value = (offsetX.value + pan.x).coerceIn(-900f, 900f)
+                offsetY.value = (offsetY.value + pan.y).coerceIn(-900f, 900f)
             }
+        }
+    } else {
+        baseModifier
+    }
+
+    Box(
+        modifier = modifier
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(LocalContext.current.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.resolve("$fileName.png"))
+                .data(
+                    LocalContext.current.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+                        ?.resolve("$fileName.png")
+                )
                 .build(),
             modifier = Modifier
                 .align(Alignment.Center)
                 .graphicsLayer(
-                    scaleX = maxOf(.5f, minOf(5f, scale.value)),
-                    scaleY = maxOf(.5f, minOf(5f, scale.value)),
+                    scaleX = maxOf(1f, minOf(5f, scale.value)),
+                    scaleY = maxOf(1f, minOf(5f, scale.value)),
                     translationX = offsetX.value,
                     translationY = offsetY.value
                 ),

@@ -8,17 +8,22 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun RoundButtons() {
+fun RoundButtons(
+    onAudioClick: () -> Unit,
+    onPhotoClick: (Boolean) -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
         AudioButton(
-            onButtonClick = {},
+            onButtonClick = { onAudioClick() },
 
-        )
+            )
         PhotoButton(
-            onButtonClick = {}
+            onButtonClick = { bool ->
+                onPhotoClick(bool)
+            }
         )
     }
 }
