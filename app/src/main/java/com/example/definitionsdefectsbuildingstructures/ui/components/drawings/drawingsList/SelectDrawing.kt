@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -31,12 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.definitionsdefectsbuildingstructures.R
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
+import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.actions.DrawingsAction
 
 @Composable
 fun SelectDrawing(
     list: List<DrawingItem>,
     paddingValues: PaddingValues,
-    onDrawingClick: (DrawingItem) -> Unit
+    onDrawingClick: (DrawingItem) -> Unit,
+    uiAction: (DrawingsAction) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -67,7 +70,7 @@ fun SelectDrawing(
                 modifier = Modifier
                     .requiredWidth(300.dp)
                     .heightIn(max = 370.dp)
-                ) {
+            ) {
                 list.forEach { entry ->
                     DropdownMenuItem(
                         modifier = Modifier.requiredWidth(300.dp),
@@ -81,7 +84,16 @@ fun SelectDrawing(
                                 fontSize = 25.sp,
                                 modifier = Modifier
                                     .align(Alignment.Start)
-
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                                modifier = Modifier.clickable {
+                                    uiAction(DrawingsAction.DeleteDrawing(entry))
+                                    if (list.isEmpty()) expanded = false
+                                }
                             )
                         }
                     )

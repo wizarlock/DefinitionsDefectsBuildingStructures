@@ -27,7 +27,12 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ZoomableImage(fileName = uiState.fileName, isZoomEnabled = photoOn)
+        ZoomableImage(
+            fileName = uiState.fileName,
+            isZoomEnabled = photoOn,
+            realHeight = uiState.height,
+            realWidth = uiState.width
+        )
         Spacer(modifier = Modifier.height(16.dp))
         RoundButtons(
             viewModel::onUiAction,

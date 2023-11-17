@@ -7,6 +7,7 @@ import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.actions.DrawingsAction
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -44,8 +45,21 @@ class DrawingViewModel @Inject constructor(
 
     fun onUiAction(action: DrawingsAction) {
         when (action) {
+            is DrawingsAction.DeleteDrawing -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.removeDrawing(action.drawing)
+                }
+            }
+
             DrawingsAction.StartRecord -> repository.startRecording()
+
             DrawingsAction.StopRecord -> repository.stopRecording()
+
+            DrawingsAction.DeleteProject -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.removeProject()
+                }
+            }
         }
     }
 }

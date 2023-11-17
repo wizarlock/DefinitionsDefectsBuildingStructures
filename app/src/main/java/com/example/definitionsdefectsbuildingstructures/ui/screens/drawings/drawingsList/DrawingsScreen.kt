@@ -17,12 +17,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.AddDrawing
+import com.example.definitionsdefectsbuildingstructures.data.navigation.ProjectsList
 import com.example.definitionsdefectsbuildingstructures.data.navigation.WorkWithDrawing
 import com.example.definitionsdefectsbuildingstructures.ui.components.app.MyBotAppBar
 import com.example.definitionsdefectsbuildingstructures.ui.components.app.MyTopAppBar
+import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.DeleteProjectButton
 import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.RecordContextButton
 import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.SelectDrawing
 import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.SettingsProjectButton
+import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.actions.DrawingsAction
 
 @Composable
 fun DrawingsScreen(
@@ -48,7 +51,7 @@ fun DrawingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = 20.dp, end = 20.dp, bottom = 100.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -64,11 +67,16 @@ fun DrawingsScreen(
                 onDrawingClick = { drawing ->
                     viewModel.updateDrawing(drawingItem = drawing)
                     navController.navigate(WorkWithDrawing.route)
-                }
+                },
+                viewModel::onUiAction
             )
 
             SettingsProjectButton(onClick = {})
             RecordContextButton(viewModel::onUiAction)
+            DeleteProjectButton(onClick = {
+                viewModel.onUiAction(DrawingsAction.DeleteProject)
+                navController.navigate(ProjectsList.route) { popUpTo(ProjectsList.route) }
+            })
         }
     }
 }

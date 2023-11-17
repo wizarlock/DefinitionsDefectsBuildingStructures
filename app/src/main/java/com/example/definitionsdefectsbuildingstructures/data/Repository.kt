@@ -2,6 +2,7 @@ package com.example.definitionsdefectsbuildingstructures.data
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.pdf.PdfRenderer
 import android.media.MediaRecorder
 import android.net.Uri
@@ -39,12 +40,9 @@ class Repository @Inject constructor(
         }
     }
 
-    override suspend fun removeProject(id: String) {
-        val containsTodoItem = _projectItems.value.any { it.id == id }
-        if (containsTodoItem) {
-            _projectItems.update { currentList ->
-                currentList.filter { it.id != id }
-            }
+    override suspend fun removeProject() {
+        _projectItems.update { currentList ->
+            currentList.filterNot { it == currentProject }
         }
     }
 
@@ -58,12 +56,9 @@ class Repository @Inject constructor(
         }
     }
 
-    override suspend fun removeDrawing(drawingId: String) {
-        val containsDrawingItem = currentProject.drawings.value.any { it.id == drawingId }
-        if (containsDrawingItem) {
-            currentProject.drawings.update { currentList ->
-                currentList.filter { it.id != drawingId }
-            }
+    override suspend fun removeDrawing(drawing: DrawingItem) {
+        currentProject.drawings.update { currentList ->
+            currentList.filterNot { it == drawing }
         }
     }
 
@@ -97,7 +92,7 @@ class Repository @Inject constructor(
             val bitmap: Bitmap =
                 Bitmap.createBitmap(pdfPage.width, pdfPage.height, Bitmap.Config.ARGB_8888)
             pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-            val outputFileName = "${drawingItem.fileName}.png"
+            val outputFileName = drawingItem.fileName
             val outputFile = File(outputDir, outputFileName)
             saveBitmapToFile(bitmap, outputFile)
             pdfPage.close()
@@ -145,6 +140,7 @@ class Repository @Inject constructor(
             updatedList.toList()
         }
     }
+
     override fun stopRecording() {
         if (recorder != null) {
             recorder?.apply {
@@ -157,5 +153,14 @@ class Repository @Inject constructor(
             }
             recorder = null
         }
+    }
+
+    override fun getImageDimensions(): Pair<Int, Int> {
+        val options = BitmapFactory.Options()
+        val dir =
+            applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(dir.toString() + "/" + currentDrawing.fileName, options)
+        return Pair(options.outWidth, options.outHeight)
     }
 }

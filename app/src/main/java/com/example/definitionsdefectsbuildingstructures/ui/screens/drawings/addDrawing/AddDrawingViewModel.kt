@@ -55,7 +55,7 @@ class AddDrawingViewModel @Inject constructor(
 
     private fun saveDrawing() {
         drawingItem.name = uiState.value.drawingName
-        drawingItem.fileName = UUID.randomUUID().toString()
+        drawingItem.fileName = UUID.randomUUID().toString() + ".png"
         viewModelScope.launch(Dispatchers.IO) {
             repository.addDrawing(drawingItem = drawingItem)
         }

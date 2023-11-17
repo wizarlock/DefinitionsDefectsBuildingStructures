@@ -14,13 +14,13 @@ interface RepositoryInterface {
 
     suspend fun addProject(projectItem: ProjectItem)
 
-    suspend fun removeProject(id: String)
+    suspend fun removeProject()
 
     suspend fun getProject(id: String): ProjectItem?
 
     suspend fun addDrawing(drawingItem: DrawingItem)
 
-    suspend fun removeDrawing(drawingId: String)
+    suspend fun removeDrawing(drawing: DrawingItem)
 
     suspend fun loadDrawing(uri: Uri?): Boolean
 
@@ -29,4 +29,6 @@ interface RepositoryInterface {
     fun startRecording()
 
     fun stopRecording()
+
+    fun getImageDimensions(): Pair<Int, Int>
 }

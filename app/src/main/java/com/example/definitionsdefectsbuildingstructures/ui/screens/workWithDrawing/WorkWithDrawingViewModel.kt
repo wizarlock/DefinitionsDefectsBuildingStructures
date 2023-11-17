@@ -30,6 +30,20 @@ class WorkWithDrawingViewModel @Inject constructor(
                 fileName = drawingItem.fileName
             )
         }
+
+        val pair = repository.getImageDimensions()
+
+        _uiState.update {
+            uiState.value.copy(
+                width = pair.first
+            )
+        }
+
+        _uiState.update {
+            uiState.value.copy(
+                height = pair.second
+            )
+        }
     }
 
     fun onUiAction(action: WorkWithDrawingAction) {
@@ -42,4 +56,6 @@ class WorkWithDrawingViewModel @Inject constructor(
 
     data class WorkWithDrawingUiState(
         val fileName: String = "",
+        val height: Int = 0,
+        val width: Int = 0
     )
