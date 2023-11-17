@@ -3,6 +3,7 @@ package com.example.definitionsdefectsbuildingstructures.data
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
@@ -17,11 +18,13 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.UUID
 import javax.inject.Inject
 
 class Repository @Inject constructor(
     @ApplicationContext private val applicationContext: Context
 ) : RepositoryInterface {
+    private var recorder: MediaRecorder? = null
     private val _projectItems: MutableStateFlow<List<ProjectItem>> = MutableStateFlow(listOf())
     private var _pdfFile: File? = null
     override val projectItems = _projectItems.asStateFlow()
@@ -85,47 +88,74 @@ class Repository @Inject constructor(
 
     override fun convertPdfPageToPng(drawingItem: DrawingItem) {
         try {
-            val outputDir = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-
-            val parcelFileDescriptor = ParcelFileDescriptor.open(_pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
+            val outputDir =
+                applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+            val parcelFileDescriptor =
+                ParcelFileDescriptor.open(_pdfFile, ParcelFileDescriptor.MODE_READ_ONLY)
             val pdfRenderer = PdfRenderer(parcelFileDescriptor)
-
-            // Получение первой страницы PDF
             val pdfPage: PdfRenderer.Page = pdfRenderer.openPage(0)
-
-            // Создание Bitmap для рендеринга страницы PDF
-            val bitmap: Bitmap = Bitmap.createBitmap(pdfPage.width, pdfPage.height, Bitmap.Config.ARGB_8888)
-
-            // Рендеринг страницы PDF в Bitmap
+            val bitmap: Bitmap =
+                Bitmap.createBitmap(pdfPage.width, pdfPage.height, Bitmap.Config.ARGB_8888)
             pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-
-            // Создание файла для сохранения изображения
             val outputFileName = "${drawingItem.fileName}.png"
             val outputFile = File(outputDir, outputFileName)
-
-            // Сохранение изображения в файл
             saveBitmapToFile(bitmap, outputFile)
-
-            // Закрываем страницу и PdfRenderer
             pdfPage.close()
             pdfRenderer.close()
-
-            println("PDF успешно преобразован в изображение и сохранен в файле: ${outputFile.absolutePath}")
         } catch (e: Exception) {
             e.printStackTrace()
-            println("Не удалось преобразовать PDF в изображение.")
         }
+
     }
 
-    // Функция для сохранения Bitmap в файл
     @Throws(IOException::class)
     private fun saveBitmapToFile(bitmap: Bitmap, outputFile: File) {
         val outputStream = FileOutputStream(outputFile)
-        try {
-            // Используйте метод compress с PNG, чтобы избежать потери данных
+        outputStream.use { outputStream ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        } finally {
-            outputStream.close()
+        }
+    }
+
+    override fun startRecording() {
+        val outputDir =
+            applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        val outputFileName = UUID.randomUUID().toString() + ".3gp"
+        addRecording(outputFileName)
+        val outputFile =
+            outputDir.toString() + "/" + outputFileName
+        recorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            setOutputFile(outputFile)
+
+            try {
+                prepare()
+                start()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun addRecording(name: String) {
+        currentProject.recordings.update { currentList ->
+            val updatedList = currentList.toMutableList()
+            updatedList.add(name)
+            updatedList.toList()
+        }
+    }
+    override fun stopRecording() {
+        if (recorder != null) {
+            recorder?.apply {
+                try {
+                    stop()
+                    release()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            recorder = null
         }
     }
 }

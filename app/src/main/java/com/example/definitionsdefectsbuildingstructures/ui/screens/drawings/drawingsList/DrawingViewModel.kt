@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.definitionsdefectsbuildingstructures.data.RepositoryInterface
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
+import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.actions.DrawingsAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +39,13 @@ class DrawingViewModel @Inject constructor(
                     drawings = projectItem.drawings
                 )
             }
+        }
+    }
+
+    fun onUiAction(action: DrawingsAction) {
+        when (action) {
+            DrawingsAction.StartRecord -> repository.startRecording()
+            DrawingsAction.StopRecord -> repository.stopRecording()
         }
     }
 }

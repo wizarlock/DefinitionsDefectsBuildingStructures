@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.definitionsdefectsbuildingstructures.data.RepositoryInterface
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
+import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.actions.WorkWithDrawingAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +19,7 @@ class WorkWithDrawingViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(WorkWithDrawingUiState())
     val uiState = _uiState.asStateFlow()
     private var drawingItem = DrawingItem()
+
     init {
         viewModelScope.launch {
             drawingItem = repository.currentDrawing
@@ -29,8 +31,15 @@ class WorkWithDrawingViewModel @Inject constructor(
             )
         }
     }
+
+    fun onUiAction(action: WorkWithDrawingAction) {
+        when (action) {
+            WorkWithDrawingAction.StartRecord -> repository.startRecording()
+            WorkWithDrawingAction.StopRecord -> repository.stopRecording()
+        }
+    }
 }
 
-data class WorkWithDrawingUiState(
-    val fileName: String = "",
-)
+    data class WorkWithDrawingUiState(
+        val fileName: String = "",
+    )

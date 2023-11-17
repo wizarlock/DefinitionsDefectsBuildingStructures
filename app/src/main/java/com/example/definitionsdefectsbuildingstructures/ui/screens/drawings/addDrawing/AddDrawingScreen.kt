@@ -32,8 +32,9 @@ fun AddDrawingScreen(navController: NavHostController) {
             onSavingClick = {
                 if (viewModel.areFieldsValid()) {
                     viewModel.onUiAction(AddDrawingAction.SaveDrawing)
-                    viewModel.test()
-                    navController.navigate(Drawings.route) { popUpTo(Drawings.route) }
+                    navController.navigate(Drawings.route) {
+                        popUpTo(Drawings.route)
+                    }
                 }
             }
         )

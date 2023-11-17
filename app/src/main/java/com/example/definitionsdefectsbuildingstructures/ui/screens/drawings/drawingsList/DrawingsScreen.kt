@@ -68,7 +68,7 @@ fun DrawingsScreen(
             )
 
             SettingsProjectButton(onClick = {})
-            RecordContextButton(onClick = {})
+            RecordContextButton(viewModel::onUiAction)
         }
     }
 }

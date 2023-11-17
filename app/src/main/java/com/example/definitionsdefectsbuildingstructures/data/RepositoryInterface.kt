@@ -25,4 +25,8 @@ interface RepositoryInterface {
     suspend fun loadDrawing(uri: Uri?): Boolean
 
     fun convertPdfPageToPng(drawingItem: DrawingItem)
+
+    fun startRecording()
+
+    fun stopRecording()
 }

@@ -25,7 +25,6 @@ class AddDrawingViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
     private val _uiStateBoolean = MutableStateFlow(AddDrawingUiStateBoolean())
     val uiStateBoolean = _uiStateBoolean.asStateFlow()
-    fun test() { repository.convertPdfPageToPng(drawingItem) }
     fun onUiAction(action: AddDrawingAction) {
         when (action) {
             is AddDrawingAction.UpdateDrawingName -> {
@@ -45,9 +44,15 @@ class AddDrawingViewModel @Inject constructor(
                 }
             }
 
-            AddDrawingAction.SaveDrawing -> saveDrawing()
+            AddDrawingAction.SaveDrawing -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    saveDrawing()
+                    repository.convertPdfPageToPng(drawingItem)
+                }
+            }
         }
     }
+
     private fun saveDrawing() {
         drawingItem.name = uiState.value.drawingName
         drawingItem.fileName = UUID.randomUUID().toString()

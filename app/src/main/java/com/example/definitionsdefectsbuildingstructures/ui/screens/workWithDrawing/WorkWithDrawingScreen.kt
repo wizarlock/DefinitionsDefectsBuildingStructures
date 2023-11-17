@@ -1,6 +1,5 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,10 +30,9 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
         ZoomableImage(fileName = uiState.fileName, isZoomEnabled = photoOn)
         Spacer(modifier = Modifier.height(16.dp))
         RoundButtons(
-            onAudioClick = {},
+            viewModel::onUiAction,
             onPhotoClick = { bool ->
                 photoOn = bool
-                Log.e("HYYYYYYI", photoOn.toString())
             }
         )
     }
