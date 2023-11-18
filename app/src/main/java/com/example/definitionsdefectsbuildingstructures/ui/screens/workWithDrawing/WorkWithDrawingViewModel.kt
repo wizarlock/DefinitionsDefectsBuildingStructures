@@ -70,18 +70,6 @@ class WorkWithDrawingViewModel @Inject constructor(
                 }
             }
 
-            is WorkWithDrawingAction.RemoveLabel -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    repository.removeLabel(action.label)
-                }
-            }
-
-            is WorkWithDrawingAction.UpdateLabel -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    repository.updateLabel(label = action.label, newFileName = action.newFileName)
-                }
-            }
-
             WorkWithDrawingAction.StartRecord -> repository.startRecording()
             WorkWithDrawingAction.StopRecord -> repository.stopRecording()
         }

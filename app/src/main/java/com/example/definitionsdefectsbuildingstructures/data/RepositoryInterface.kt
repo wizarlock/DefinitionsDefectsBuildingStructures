@@ -37,7 +37,7 @@ interface RepositoryInterface {
 
     suspend fun addLabel(imageX: Float, imageY: Float, fileName: String)
 
-    suspend fun removeLabel(label: Label)
+    suspend fun removeLabel()
 
-    suspend fun updateLabel(label: Label, newFileName: String)
+    suspend fun updateLabel(newFileName: String)
 }

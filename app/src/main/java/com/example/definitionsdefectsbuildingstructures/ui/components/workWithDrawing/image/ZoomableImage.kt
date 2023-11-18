@@ -99,14 +99,14 @@ fun ZoomableImage(
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val bitmap = data?.extras?.get("data") as Bitmap
-            val filename = UUID.randomUUID().toString() + ".jpg"
+            val fileLabel = UUID.randomUUID().toString() + ".jpg"
             val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString()
-            saveBitmapToFile(bitmap, filename, dir)
+            saveBitmapToFile(bitmap, fileLabel, dir)
             uiAction(
                 WorkWithDrawingAction.AddLabel(
                     imageX = imageX.value,
                     imageY = imageY.value,
-                    fileName = fileName
+                    fileName = fileLabel
                 )
             )
         }

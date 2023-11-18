@@ -46,4 +46,6 @@
     <string name="audio_start">Аудиозапись начата!</string>
     <string name="audio_stop">Аудиозапись успешно сохранена!</string>
     <string name="delete_project">Удалить проект</string>
+    <string name="delete_label">Удалить метку</string>
+    <string name="change_photo">Сменить фото</string>
 </resources>

@@ -175,19 +175,17 @@ class Repository @Inject constructor(
         }
     }
 
-    override suspend fun removeLabel(label: Label) {
+    override suspend fun removeLabel() {
         currentDrawing.labels.update { currentList ->
-            currentList.filterNot { it == label }
+            currentList.filterNot { it == currentLabel }
         }
     }
 
-    override suspend fun updateLabel(label: Label, newFileName: String) {
+    override suspend fun updateLabel(newFileName: String) {
         currentDrawing.labels.update { currentList ->
             val updatedList = currentList.toMutableList()
-            val index = updatedList.indexOf(label)
-            if (index != -1) {
-                updatedList[index] = updatedList[index].copy(fileName = newFileName)
-            }
+            val index = updatedList.indexOf(currentLabel)
+            updatedList[index] = updatedList[index].copy(fileName = newFileName)
             updatedList.toList()
         }
     }
