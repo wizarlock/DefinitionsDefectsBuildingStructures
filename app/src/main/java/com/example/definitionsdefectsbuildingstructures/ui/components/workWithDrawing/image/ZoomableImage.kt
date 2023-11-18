@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -17,7 +16,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -33,8 +31,8 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -55,7 +53,8 @@ fun ZoomableImage(
     realWidth: Int,
     realHeight: Int,
     uiAction: (WorkWithDrawingAction) -> Unit,
-    listLabels: List<Label>
+    listLabels: List<Label>,
+    onLabelClick: (Label) -> Unit
 ) {
     val scale = remember { mutableStateOf(1f) }
     val offsetX = remember { mutableStateOf(0f) }
@@ -64,7 +63,7 @@ fun ZoomableImage(
     val imageY = remember { mutableStateOf(0f) }
 
     val context = LocalContext.current
-
+    val hz = LocalDensity.current
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
     val boxModifier = Modifier
@@ -110,7 +109,6 @@ fun ZoomableImage(
                     fileName = fileName
                 )
             )
-            Log.e("aaaaaaaaaaaaaaaaaaaaaaaaa", listLabels.size.toString())
         }
     }
 
@@ -118,12 +116,15 @@ fun ZoomableImage(
         imageModifier.pointerInput(Unit) {
             if (permissionState.hasPermission) {
                 detectTapGestures { offset ->
+                    val offsetInDp = with(hz) {
+                        Offset(offset.x / density, offset.y / density)
+                    }
                     // val coefficientWidth = realWidth.toDouble() / size.width.toDouble()
                     // val coefficientHeight = realHeight.toDouble() / size.height.toDouble()
                     //val imageX = offset.x * coefficientWidth
                     //val imageY = offset.y * coefficientHeight
-                    imageX.value = offset.x
-                    imageY.value = offset.y
+                    imageX.value = offsetInDp.x
+                    imageY.value = offsetInDp.y
                     val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     cameraLauncher.launch(cameraIntent)
 
@@ -140,7 +141,6 @@ fun ZoomableImage(
         Box(
             modifier = imageModifier
                 .align(Alignment.Center)
-
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -154,29 +154,27 @@ fun ZoomableImage(
                     .align(Alignment.Center),
                 contentDescription = null
             )
-           // listLabels.forEach { entry ->
+            listLabels.forEach { entry ->
                 Canvas(
                     modifier = Modifier
                         .offset(
-                            //x = entry.x.dp,
-                           // y = entry.y.dp
-                        x = 50f.dp,
-                        y = 100f.dp
+                            x = entry.x.dp,
+                            y = entry.y.dp
                         )
-                        .clickable { }
+                        .clickable { onLabelClick(entry) }
                 ) {
                     drawCircle(
                         color = Color.Black,
-                        radius = 3.dp.toPx(),
+                        radius = 1.dp.toPx(),
                         style = Stroke(1.dp.toPx())
                     )
                     drawCircle(
                         color = Color.Red,
-                        radius = 3.dp.toPx() - 1.dp.toPx() / 2,
+                        radius = 0.75.dp.toPx(),
                         style = Fill
 
                     )
-                //}
+                }
             }
         }
         AsyncImage(

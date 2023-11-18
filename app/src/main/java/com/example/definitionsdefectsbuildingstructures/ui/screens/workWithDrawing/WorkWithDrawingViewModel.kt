@@ -22,6 +22,10 @@ class WorkWithDrawingViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
     private var drawingItem = DrawingItem()
 
+    fun updateLabel(label: Label) {
+        repository.currentLabel = label
+    }
+
     init {
         viewModelScope.launch {
             drawingItem = repository.currentDrawing

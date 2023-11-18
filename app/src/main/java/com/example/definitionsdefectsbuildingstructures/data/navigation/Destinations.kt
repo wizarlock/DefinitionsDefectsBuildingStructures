@@ -39,3 +39,8 @@ object WorkWithDrawing : Destination {
     const val id = "id"
     override val route: String = "workWithDrawing"
 }
+
+object UpdateLabel: Destination {
+    const val id = "id"
+    override val route: String = "updateLabel"
+}

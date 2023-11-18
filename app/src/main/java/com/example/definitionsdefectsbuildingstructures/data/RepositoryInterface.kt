@@ -13,6 +13,8 @@ interface RepositoryInterface {
 
     var currentDrawing: DrawingItem
 
+    var currentLabel: Label
+
     suspend fun addProject(projectItem: ProjectItem)
 
     suspend fun removeProject()

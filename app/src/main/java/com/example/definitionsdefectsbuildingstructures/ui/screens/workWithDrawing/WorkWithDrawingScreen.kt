@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.definitionsdefectsbuildingstructures.data.navigation.UpdateLabel
 import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.RoundButtons
 import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.image.ZoomableImage
 
@@ -33,7 +34,11 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
             realHeight = uiState.height,
             realWidth = uiState.width,
             uiAction = viewModel::onUiAction,
-            listLabels = uiState.labels.collectAsState().value
+            listLabels = uiState.labels.collectAsState().value,
+            onLabelClick = { label ->
+                viewModel.updateLabel(label)
+                navController.navigate(UpdateLabel.route)
+            }
         )
         Spacer(modifier = Modifier.height(16.dp))
         RoundButtons(

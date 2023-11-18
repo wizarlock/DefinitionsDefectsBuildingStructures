@@ -32,6 +32,7 @@ class Repository @Inject constructor(
     override val projectItems = _projectItems.asStateFlow()
     override var currentProject = ProjectItem()
     override var currentDrawing = DrawingItem()
+    override var currentLabel = Label()
 
     override suspend fun addProject(projectItem: ProjectItem) {
         _projectItems.update { currentList ->
