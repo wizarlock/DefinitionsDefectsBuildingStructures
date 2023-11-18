@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
+import com.example.definitionsdefectsbuildingstructures.data.model.Label
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -162,5 +163,31 @@ class Repository @Inject constructor(
         options.inJustDecodeBounds = true
         BitmapFactory.decodeFile(dir.toString() + "/" + currentDrawing.fileName, options)
         return Pair(options.outWidth, options.outHeight)
+    }
+
+    override suspend fun addLabel(imageX: Float, imageY: Float, fileName: String) {
+        val newLabel = Label(x = imageX, y = imageY, fileName = fileName)
+        currentDrawing.labels.update { currentList ->
+            val updatedList = currentList.toMutableList()
+            updatedList.add(newLabel)
+            updatedList.toList()
+        }
+    }
+
+    override suspend fun removeLabel(label: Label) {
+        currentDrawing.labels.update { currentList ->
+            currentList.filterNot { it == label }
+        }
+    }
+
+    override suspend fun updateLabel(label: Label, newFileName: String) {
+        currentDrawing.labels.update { currentList ->
+            val updatedList = currentList.toMutableList()
+            val index = updatedList.indexOf(label)
+            if (index != -1) {
+                updatedList[index] = updatedList[index].copy(fileName = newFileName)
+            }
+            updatedList.toList()
+        }
     }
 }

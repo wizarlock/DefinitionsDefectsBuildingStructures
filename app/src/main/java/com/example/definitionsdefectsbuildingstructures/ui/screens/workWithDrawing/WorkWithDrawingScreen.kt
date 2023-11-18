@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.RoundButtons
-import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.ZoomableImage
+import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.image.ZoomableImage
 
 @Composable
 fun WorkWithDrawingScreen(navController: NavHostController) {
@@ -31,7 +31,9 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
             fileName = uiState.fileName,
             isZoomEnabled = photoOn,
             realHeight = uiState.height,
-            realWidth = uiState.width
+            realWidth = uiState.width,
+            uiAction = viewModel::onUiAction,
+            listLabels = uiState.labels.collectAsState().value
         )
         Spacer(modifier = Modifier.height(16.dp))
         RoundButtons(

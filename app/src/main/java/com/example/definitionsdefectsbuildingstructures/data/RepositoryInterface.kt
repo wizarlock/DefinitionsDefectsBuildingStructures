@@ -2,6 +2,7 @@ package com.example.definitionsdefectsbuildingstructures.data
 
 import android.net.Uri
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
+import com.example.definitionsdefectsbuildingstructures.data.model.Label
 import com.example.definitionsdefectsbuildingstructures.data.model.ProjectItem
 import kotlinx.coroutines.flow.StateFlow
 
@@ -31,4 +32,10 @@ interface RepositoryInterface {
     fun stopRecording()
 
     fun getImageDimensions(): Pair<Int, Int>
+
+    suspend fun addLabel(imageX: Float, imageY: Float, fileName: String)
+
+    suspend fun removeLabel(label: Label)
+
+    suspend fun updateLabel(label: Label, newFileName: String)
 }
