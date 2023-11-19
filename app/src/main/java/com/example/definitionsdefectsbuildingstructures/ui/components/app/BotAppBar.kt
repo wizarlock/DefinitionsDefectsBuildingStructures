@@ -50,8 +50,8 @@ fun MyBotAppBar(onAddClick: () -> Unit) {
 fun CreateLogoForBot() {
     Box(
         modifier = Modifier
-
-            .padding(5.dp),
+            .padding(5.dp)
+            .fillMaxHeight(),
         contentAlignment = Alignment.Center,
     ) {
         Image(
@@ -65,7 +65,6 @@ fun CreateLogoForBot() {
 fun CreateNameForBot() {
     Column(
         modifier = Modifier
-
             .fillMaxHeight()
             .padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

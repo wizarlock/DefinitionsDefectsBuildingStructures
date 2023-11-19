@@ -1,9 +1,10 @@
 package com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -21,7 +22,9 @@ import com.example.definitionsdefectsbuildingstructures.R
 @Preview
 @Composable
 fun LogoAndName() {
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         CreateName()
         CreateLogo()
     }
@@ -63,15 +66,16 @@ fun CreateText(text: String, topPad: Int) {
 fun CreateLogo() {
     Box(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth(0.5f)
+            .fillMaxHeight(0.5f),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.big_logo),
             contentDescription = "logo",
             modifier = Modifier
-                .padding(top = 10.dp, bottom = 10.dp)
-                .border(2.dp, Color.Black)
+                .padding(16.dp)
+                .fillMaxSize()
         )
     }
 }
