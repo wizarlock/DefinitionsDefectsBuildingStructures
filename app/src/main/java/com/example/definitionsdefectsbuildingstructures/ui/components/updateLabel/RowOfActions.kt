@@ -4,6 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -22,12 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import com.example.definitionsdefectsbuildingstructures.R
 import com.example.definitionsdefectsbuildingstructures.ui.screens.updateLabel.actions.UpdateLabelAction
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.File
 import java.util.UUID
 
 
@@ -39,17 +42,26 @@ fun RowOfActions(
     ) {
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val context = LocalContext.current
+    var currentPhotoPath = ""
 
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
         if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val bitmap = data?.extras?.get("data") as Bitmap
+            val exif = ExifInterface(currentPhotoPath)
+            val rotationAngle = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270
+                else -> 0
+            }
+            val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, Matrix().apply { postRotate(rotationAngle.toFloat()) }, true)
             val fileLabel = UUID.randomUUID().toString() + ".jpg"
             uiAction(UpdateLabelAction.UpdatePhoto(fileLabel))
             val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString()
-            saveBitmapToFile(bitmap, fileLabel, dir)
+            val file = File("$dir/$fileLabel")
+            file.writeBitmap(rotatedBitmap, Bitmap.CompressFormat.JPEG, 100)
         }
     }
 
@@ -81,7 +93,13 @@ fun RowOfActions(
                 fontSize = 20.sp,
                 modifier = Modifier.clickable {
                     if (permissionState.hasPermission) {
+                        val strFileName = "photo"
+                        val storageDir = context.cacheDir
+                        val imgFile = File.createTempFile(strFileName, ".jpg", storageDir)
+                        currentPhotoPath = imgFile.absolutePath
                         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        val imageUri = FileProvider.getUriForFile(context, "com.example.definitionsdefectsbuildingstructures.fileprovider", imgFile)
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
                         cameraLauncher.launch(cameraIntent)
                     } else permissionState.launchPermissionRequest()
                 },
@@ -92,14 +110,9 @@ fun RowOfActions(
         }
     }
 }
-
-fun saveBitmapToFile(bitmap: Bitmap, filename: String, dir: String) {
-    val imageFile = "$dir/$filename"
-    try {
-        val outputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        outputStream.close()
-    } catch (e: IOException) {
-        e.printStackTrace()
+fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+    outputStream().use { out ->
+        bitmap.compress(format, quality, out)
+        out.flush()
     }
 }

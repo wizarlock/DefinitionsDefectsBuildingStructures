@@ -4,6 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,15 +37,17 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.definitionsdefectsbuildingstructures.data.model.Label
+import com.example.definitionsdefectsbuildingstructures.ui.components.updateLabel.writeBitmap
 import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.actions.WorkWithDrawingAction
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.File
+
 import java.util.UUID
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -61,6 +66,7 @@ fun ZoomableImage(
     val offsetY = remember { mutableStateOf(0f) }
     val imageX = remember { mutableStateOf(0f) }
     val imageY = remember { mutableStateOf(0f) }
+    var currentPhotoPath = ""
 
     val context = LocalContext.current
     val hz = LocalDensity.current
@@ -97,11 +103,19 @@ fun ZoomableImage(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val bitmap = data?.extras?.get("data") as Bitmap
+            val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
+            val exif = ExifInterface(currentPhotoPath)
+            val rotationAngle = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270
+                else -> 0
+            }
+            val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, Matrix().apply { postRotate(rotationAngle.toFloat()) }, true)
             val fileLabel = UUID.randomUUID().toString() + ".jpg"
             val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString()
-            saveBitmapToFile(bitmap, fileLabel, dir)
+            val file = File("$dir/$fileLabel")
+            file.writeBitmap(rotatedBitmap, Bitmap.CompressFormat.JPEG, 100)
             uiAction(
                 WorkWithDrawingAction.AddLabel(
                     imageX = imageX.value,
@@ -119,13 +133,19 @@ fun ZoomableImage(
                     val offsetInDp = with(hz) {
                         Offset(offset.x / density, offset.y / density)
                     }
-                    // val coefficientWidth = realWidth.toDouble() / size.width.toDouble()
-                    // val coefficientHeight = realHeight.toDouble() / size.height.toDouble()
-                    //val imageX = offset.x * coefficientWidth
-                    //val imageY = offset.y * coefficientHeight
                     imageX.value = offsetInDp.x
                     imageY.value = offsetInDp.y
+                    val strFileName = "photo"
+                    val storageDir = context.cacheDir
+                    val imgFile = File.createTempFile(strFileName, ".jpg", storageDir)
+                    currentPhotoPath = imgFile.absolutePath
                     val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    val imageUri = FileProvider.getUriForFile(
+                        context,
+                        "com.example.definitionsdefectsbuildingstructures.fileprovider",
+                        imgFile
+                    )
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
                     cameraLauncher.launch(cameraIntent)
 
                 }
@@ -189,16 +209,5 @@ fun ZoomableImage(
                 .align(Alignment.Center),
             contentDescription = null,
         )
-    }
-}
-
-fun saveBitmapToFile(bitmap: Bitmap, filename: String, dir: String) {
-    val imageFile = "$dir/$filename"
-    try {
-        val outputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        outputStream.close()
-    } catch (e: IOException) {
-        e.printStackTrace()
     }
 }

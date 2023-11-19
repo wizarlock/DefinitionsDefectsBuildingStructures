@@ -39,7 +39,6 @@ fun LabelImage(fileName: String) {
                 .size(Size.ORIGINAL)
                 .build(),
             modifier = Modifier
-                .fillMaxSize()
                 .align(Alignment.Center),
             contentDescription = null,
             contentScale = ContentScale.FillBounds
