@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,14 +44,14 @@ fun RowOfActions(
     ) {
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val context = LocalContext.current
-    var currentPhotoPath = ""
+    val currentPhotoPath = remember { mutableStateOf("") }
 
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
+        val bitmap = BitmapFactory.decodeFile(currentPhotoPath.value)
         if (result.resultCode == Activity.RESULT_OK) {
-            val exif = ExifInterface(currentPhotoPath)
+            val exif = ExifInterface(currentPhotoPath.value)
             val rotationAngle = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> 90
                 ExifInterface.ORIENTATION_ROTATE_180 -> 180
@@ -93,10 +95,10 @@ fun RowOfActions(
                 fontSize = 20.sp,
                 modifier = Modifier.clickable {
                     if (permissionState.hasPermission) {
-                        val strFileName = "photo"
+                        val strFileName = UUID.randomUUID().toString()
                         val storageDir = context.cacheDir
                         val imgFile = File.createTempFile(strFileName, ".jpg", storageDir)
-                        currentPhotoPath = imgFile.absolutePath
+                        currentPhotoPath.value = imgFile.absolutePath
                         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                         val imageUri = FileProvider.getUriForFile(context, "com.example.definitionsdefectsbuildingstructures.fileprovider", imgFile)
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)

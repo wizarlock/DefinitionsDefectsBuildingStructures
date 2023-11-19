@@ -66,7 +66,7 @@ fun ZoomableImage(
     val offsetY = remember { mutableStateOf(0f) }
     val imageX = remember { mutableStateOf(0f) }
     val imageY = remember { mutableStateOf(0f) }
-    var currentPhotoPath = ""
+    val currentPhotoPath = remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val hz = LocalDensity.current
@@ -103,8 +103,8 @@ fun ZoomableImage(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
-            val exif = ExifInterface(currentPhotoPath)
+            val bitmap = BitmapFactory.decodeFile(currentPhotoPath.value)
+            val exif = ExifInterface(currentPhotoPath.value)
             val rotationAngle = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> 90
                 ExifInterface.ORIENTATION_ROTATE_180 -> 180
@@ -135,10 +135,10 @@ fun ZoomableImage(
                     }
                     imageX.value = offsetInDp.x
                     imageY.value = offsetInDp.y
-                    val strFileName = "photo"
+                    val strFileName = UUID.randomUUID().toString()
                     val storageDir = context.cacheDir
                     val imgFile = File.createTempFile(strFileName, ".jpg", storageDir)
-                    currentPhotoPath = imgFile.absolutePath
+                    currentPhotoPath.value = imgFile.absolutePath
                     val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     val imageUri = FileProvider.getUriForFile(
                         context,
