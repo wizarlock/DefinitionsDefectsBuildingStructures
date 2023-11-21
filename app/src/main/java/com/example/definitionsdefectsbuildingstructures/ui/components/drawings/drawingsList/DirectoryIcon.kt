@@ -1,24 +1,22 @@
 package com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.definitionsdefectsbuildingstructures.R
 
 @Composable
-fun DeleteProjectIcon(onDeleteClick: () -> Unit) {
+fun DirectoryIcon(onDirectoryClick: () -> Unit) {
     IconButton(
-        onClick = { onDeleteClick() }
+        onClick = { onDirectoryClick() }
     ) {
-        Icon(
-            imageVector = Icons.Filled.Delete,
-            contentDescription = "Delete",
-            tint = Color.Red,
+        Image(
+            painter = painterResource(id = R.drawable.baseline_folder_open_black_36dp),
+            contentDescription = "",
             modifier = Modifier
                 .size(50.dp)
         )

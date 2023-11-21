@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,7 +54,7 @@ class AddDrawingViewModel @Inject constructor(
 
     private fun saveDrawing() {
         drawingItem.name = uiState.value.drawingName
-        drawingItem.fileName = UUID.randomUUID().toString() + ".png"
+        drawingItem.fileName = drawingItem.name + ".png"
         viewModelScope.launch(Dispatchers.IO) {
             repository.addDrawing(drawingItem = drawingItem)
         }

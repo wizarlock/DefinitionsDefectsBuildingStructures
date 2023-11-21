@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.R
 import com.example.definitionsdefectsbuildingstructures.data.navigation.AddProject
 import com.example.definitionsdefectsbuildingstructures.data.navigation.Drawings
-import com.example.definitionsdefectsbuildingstructures.ui.components.app.MyBotAppBar
+import com.example.definitionsdefectsbuildingstructures.ui.components.projects.listOfProjects.MyBotAppBar
 import com.example.definitionsdefectsbuildingstructures.ui.components.app.MyTopAppBar
 import com.example.definitionsdefectsbuildingstructures.ui.components.projects.listOfProjects.ListOfProjects
 

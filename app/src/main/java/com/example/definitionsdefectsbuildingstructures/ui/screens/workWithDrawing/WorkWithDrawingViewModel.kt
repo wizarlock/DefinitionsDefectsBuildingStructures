@@ -1,5 +1,7 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.definitionsdefectsbuildingstructures.data.RepositoryInterface
@@ -69,7 +71,7 @@ class WorkWithDrawingViewModel @Inject constructor(
                     )
                 }
             }
-
+            
             WorkWithDrawingAction.StartRecord -> repository.startRecording()
             WorkWithDrawingAction.StopRecord -> repository.stopRecording()
         }
@@ -80,5 +82,8 @@ data class WorkWithDrawingUiState(
     val fileName: String = "",
     val height: Int = 0,
     val width: Int = 0,
-    val labels: MutableStateFlow<List<Label>> = MutableStateFlow(listOf())
+    val labels: MutableStateFlow<List<Label>> = MutableStateFlow(listOf()),
+    val initialScale: MutableState<Float> = mutableStateOf(1f),
+    val initialOffsetX: MutableState<Float> = mutableStateOf(0f),
+    val initialOffsetY: MutableState<Float> = mutableStateOf(0f)
 )

@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,6 +44,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.definitionsdefectsbuildingstructures.data.model.Label
 import com.example.definitionsdefectsbuildingstructures.ui.components.updateLabel.writeBitmap
+import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.WorkWithDrawingUiState
 import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.actions.WorkWithDrawingAction
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -53,17 +55,11 @@ import java.util.UUID
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ZoomableImage(
-    fileName: String,
+    uiState: WorkWithDrawingUiState,
     isZoomEnabled: Boolean,
-    realWidth: Int,
-    realHeight: Int,
     uiAction: (WorkWithDrawingAction) -> Unit,
-    listLabels: List<Label>,
-    onLabelClick: (Label) -> Unit
+    onLabelClick: (Label) -> Unit,
 ) {
-    val scale = remember { mutableStateOf(1f) }
-    val offsetX = remember { mutableStateOf(0f) }
-    val offsetY = remember { mutableStateOf(0f) }
     val imageX = remember { mutableStateOf(0f) }
     val imageY = remember { mutableStateOf(0f) }
     val currentPhotoPath = remember { mutableStateOf("") }
@@ -82,9 +78,9 @@ fun ZoomableImage(
     val modifierBox: Modifier = if (!isZoomEnabled) {
         boxModifier.pointerInput(Unit) {
             detectTransformGestures { _, pan, zoom, _ ->
-                scale.value *= zoom
-                offsetX.value = (offsetX.value + pan.x).coerceIn(-1000f, 1000f)
-                offsetY.value = (offsetY.value + pan.y).coerceIn(-1000f, 1000f)
+                uiState.initialScale.value *= zoom
+                uiState.initialOffsetX.value = (uiState.initialOffsetX.value + pan.x)
+                uiState.initialOffsetY.value = (uiState.initialOffsetY.value + pan.y)
             }
         }
     } else {
@@ -93,10 +89,10 @@ fun ZoomableImage(
 
     val imageModifier = Modifier
         .graphicsLayer(
-            scaleX = maxOf(1f, minOf(10f, scale.value)),
-            scaleY = maxOf(1f, minOf(10f, scale.value)),
-            translationX = offsetX.value,
-            translationY = offsetY.value
+            scaleX = maxOf(1f, minOf(20f, uiState.initialScale.value)),
+            scaleY = maxOf(1f, minOf(20f, uiState.initialScale.value)),
+            translationX = uiState.initialOffsetX.value,
+            translationY = uiState.initialOffsetY.value
         )
 
     val cameraLauncher = rememberLauncherForActivityResult(
@@ -166,7 +162,7 @@ fun ZoomableImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
                         LocalContext.current.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                            ?.resolve(fileName)
+                            ?.resolve(uiState.fileName)
                     )
                     .size(Size.ORIGINAL)
                     .build(),
@@ -174,7 +170,7 @@ fun ZoomableImage(
                     .align(Alignment.Center),
                 contentDescription = null
             )
-            listLabels.forEach { entry ->
+            uiState.labels.collectAsState().value.forEach { entry ->
                 Canvas(
                     modifier = Modifier
                         .offset(
@@ -201,7 +197,7 @@ fun ZoomableImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(
                     LocalContext.current.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                        ?.resolve(fileName)
+                        ?.resolve(uiState.fileName)
                 )
                 .size(Size.ORIGINAL)
                 .build(),
