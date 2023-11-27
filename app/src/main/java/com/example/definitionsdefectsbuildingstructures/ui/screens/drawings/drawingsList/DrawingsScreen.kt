@@ -1,5 +1,12 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.DocumentsContract
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.definitionsdefectsbuildingstructures.data.navigation.AddDrawing
@@ -31,13 +40,16 @@ import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.d
 import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.SelectDrawing
 import com.example.definitionsdefectsbuildingstructures.ui.components.drawings.drawingsList.SettingsProjectButton
 import com.example.definitionsdefectsbuildingstructures.ui.screens.drawings.drawingsList.actions.DrawingsAction
+import java.io.File
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DrawingsScreen(
     navController: NavHostController
 ) {
     val viewModel: DrawingViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             MyTopAppBar(
@@ -75,7 +87,7 @@ fun DrawingsScreen(
             )
             AddDrawingIcon(onAddClick = { navController.navigate(AddDrawing.route) })
             SettingsProjectButton(onClick = {})
-            RecordContextButton(viewModel::onUiAction)
+            RecordContextButton(viewModel::onUiAction, uiState)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -86,9 +98,15 @@ fun DrawingsScreen(
                     navController.navigate(ProjectsList.route) { popUpTo(ProjectsList.route) }
                 })
                 DirectoryIcon(onDirectoryClick = {
-
+                    val path =
+                        Environment.getExternalStorageDirectory().toString() + "/" + "VK" + "/" + "Downloads"
+                    val uri = Uri.parse(path)
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(uri,  DocumentsContract.Document.MIME_TYPE_DIR)
+                    context.startActivity(intent)
                 })
             }
         }
     }
 }
+//val uri = Uri.parse("content://" + documentsDirectory.absolutePath)

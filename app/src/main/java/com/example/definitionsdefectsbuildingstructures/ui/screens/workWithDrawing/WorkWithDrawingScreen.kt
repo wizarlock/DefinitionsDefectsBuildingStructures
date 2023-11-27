@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.definitionsdefectsbuildingstructures.data.datastore.UserPreferences
 import com.example.definitionsdefectsbuildingstructures.data.navigation.UpdateLabel
 import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.DrawingTopBar
 import com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.RoundButtons
@@ -26,7 +27,6 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
     var photoOn by remember { mutableStateOf(false) }
     val viewModel: WorkWithDrawingViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
-
     Scaffold(
         topBar = {
             DrawingTopBar(
@@ -61,7 +61,8 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
                 viewModel::onUiAction,
                 onPhotoClick = { bool ->
                     photoOn = bool
-                }
+                },
+                uiState = uiState
             )
         }
     }

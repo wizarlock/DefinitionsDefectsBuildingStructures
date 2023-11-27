@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.definitionsdefectsbuildingstructures.R
+import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.WorkWithDrawingUiState
 import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.actions.WorkWithDrawingAction
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -31,7 +32,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AudioButton(
-    uiAction: (WorkWithDrawingAction) -> Unit
+    uiAction: (WorkWithDrawingAction) -> Unit,
+    uiState: WorkWithDrawingUiState
 ) {
     var clickCount by remember { mutableStateOf(0) }
     val permissionState = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
@@ -45,7 +47,8 @@ fun AudioButton(
             if (permissionState.hasPermission) {
                 clickCount++
                 if (clickCount % 2 != 0) {
-                    uiAction(WorkWithDrawingAction.StartRecord)
+                    uiAction(WorkWithDrawingAction.StartRecord(uiState.audioNum.toString()))
+                    uiAction(WorkWithDrawingAction.UpdateAudioNum(uiState.audioNum + 1))
                     Toast.makeText(context, start, Toast.LENGTH_SHORT).show()
                 } else {
                     uiAction(WorkWithDrawingAction.StopRecord)

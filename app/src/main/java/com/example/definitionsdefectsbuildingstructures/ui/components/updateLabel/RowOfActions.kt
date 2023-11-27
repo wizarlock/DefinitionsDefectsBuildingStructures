@@ -45,7 +45,6 @@ fun RowOfActions(
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val context = LocalContext.current
     val currentPhotoPath = remember { mutableStateOf("") }
-
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->

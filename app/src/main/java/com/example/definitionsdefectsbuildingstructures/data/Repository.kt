@@ -113,10 +113,10 @@ class Repository @Inject constructor(
         }
     }
 
-    override fun startRecording() {
+    override fun startRecording(name: String) {
         val outputDir =
             applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-        val outputFileName = UUID.randomUUID().toString() + ".3gp"
+        val outputFileName = "$name.3gp"
         addRecording(outputFileName)
         val outputFile =
             outputDir.toString() + "/" + outputFileName

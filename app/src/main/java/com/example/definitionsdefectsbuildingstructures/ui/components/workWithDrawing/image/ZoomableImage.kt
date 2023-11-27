@@ -11,16 +11,25 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +46,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -49,10 +62,9 @@ import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import java.io.File
-
 import java.util.UUID
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ZoomableImage(
     uiState: WorkWithDrawingUiState,
@@ -101,14 +113,26 @@ fun ZoomableImage(
         if (result.resultCode == Activity.RESULT_OK) {
             val bitmap = BitmapFactory.decodeFile(currentPhotoPath.value)
             val exif = ExifInterface(currentPhotoPath.value)
-            val rotationAngle = when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+            val rotationAngle = when (exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> 90
                 ExifInterface.ORIENTATION_ROTATE_180 -> 180
                 ExifInterface.ORIENTATION_ROTATE_270 -> 270
                 else -> 0
             }
-            val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, Matrix().apply { postRotate(rotationAngle.toFloat()) }, true)
-            val fileLabel = UUID.randomUUID().toString() + ".jpg"
+            val rotatedBitmap = Bitmap.createBitmap(
+                bitmap,
+                0,
+                0,
+                bitmap.width,
+                bitmap.height,
+                Matrix().apply { postRotate(rotationAngle.toFloat()) },
+                true
+            )
+            val fileLabel = uiState.photoNum.toString() + ".jpg"
+            uiAction(WorkWithDrawingAction.UpdatePhotoNum(uiState.photoNum + 1))
             val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString()
             val file = File("$dir/$fileLabel")
             file.writeBitmap(rotatedBitmap, Bitmap.CompressFormat.JPEG, 100)
@@ -152,11 +176,11 @@ fun ZoomableImage(
     }
 
     Box(
-        modifier = modifierBox
+        modifier = modifierBox,
+        contentAlignment = Alignment.Center
     ) {
         Box(
-            modifier = imageModifier
-                .align(Alignment.Center)
+            modifier = modifierImage
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -168,8 +192,9 @@ fun ZoomableImage(
                     .build(),
                 modifier = Modifier
                     .align(Alignment.Center),
-                contentDescription = null
+                contentDescription = null,
             )
+
             uiState.labels.collectAsState().value.forEach { entry ->
                 Canvas(
                     modifier = Modifier
@@ -193,17 +218,11 @@ fun ZoomableImage(
                 }
             }
         }
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(
-                    LocalContext.current.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                        ?.resolve(uiState.fileName)
-                )
-                .size(Size.ORIGINAL)
-                .build(),
-            modifier = modifierImage
-                .align(Alignment.Center),
-            contentDescription = null,
-        )
     }
+}
+
+private fun takeLastDigits(name: String): String {
+    val list = name.split(".")
+    return if (list[0].length > 1) list[0].takeLast(2)
+    else "0" + list[0]
 }

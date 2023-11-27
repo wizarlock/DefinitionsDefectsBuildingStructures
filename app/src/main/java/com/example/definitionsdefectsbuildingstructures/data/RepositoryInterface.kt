@@ -29,7 +29,7 @@ interface RepositoryInterface {
 
     fun convertPdfPageToPng(drawingItem: DrawingItem)
 
-    fun startRecording()
+    fun startRecording(name: String)
 
     fun stopRecording()
 
