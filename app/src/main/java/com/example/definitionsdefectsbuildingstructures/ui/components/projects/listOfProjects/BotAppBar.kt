@@ -55,7 +55,7 @@ fun CreateLogoForBot() {
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.big_logo),
             contentDescription = "logo"
         )
     }

@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
+import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.UUID
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -182,11 +182,9 @@ class Repository @Inject constructor(
     }
 
     override suspend fun updateLabel(newFileName: String) {
-        currentDrawing.labels.update { currentList ->
-            val updatedList = currentList.toMutableList()
-            val index = updatedList.indexOf(currentLabel)
-            updatedList[index] = updatedList[index].copy(fileName = newFileName)
-            updatedList.toList()
-        }
+        val dir = applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        val oldFile = File(dir, currentLabel.fileName)
+        val newFile = File(dir, newFileName)
+        FileUtils.copyFile(newFile, oldFile)
     }
 }

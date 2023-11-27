@@ -1,6 +1,7 @@
 package com.example.definitionsdefectsbuildingstructures.ui.components.workWithDrawing.image
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,24 +12,18 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,8 +35,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -64,7 +57,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import java.io.File
 import java.util.UUID
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ZoomableImage(
     uiState: WorkWithDrawingUiState,
@@ -196,24 +189,18 @@ fun ZoomableImage(
             )
 
             uiState.labels.collectAsState().value.forEach { entry ->
-                Canvas(
-                    modifier = Modifier
-                        .offset(
-                            x = entry.x.dp,
-                            y = entry.y.dp
-                        )
-                        .clickable { onLabelClick(entry) }
+                Box(
+                    modifier = getModifier(entry = entry, bool = isZoomEnabled, onLabelClick),
+                    contentAlignment = Alignment.Center
                 ) {
-                    drawCircle(
+                    Text(
+                        text = takeLastDigits(entry.fileName),
+                        fontSize = 2.sp,
                         color = Color.Black,
-                        radius = 1.dp.toPx(),
-                        style = Stroke(1.dp.toPx())
-                    )
-                    drawCircle(
-                        color = Color.Red,
-                        radius = 0.75.dp.toPx(),
-                        style = Fill
-
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
@@ -225,4 +212,33 @@ private fun takeLastDigits(name: String): String {
     val list = name.split(".")
     return if (list[0].length > 1) list[0].takeLast(2)
     else "0" + list[0]
+}
+
+@SuppressLint("ModifierFactoryExtensionFunction")
+@OptIn(ExperimentalFoundationApi::class)
+fun getModifier(entry: Label, bool: Boolean, onLabelClick: (Label) -> Unit): Modifier {
+    val clickBoxModifier = Modifier
+        .offset(
+            x = entry.x.dp - 2.dp,
+            y = entry.y.dp - 2.dp
+        )
+        .size(4.dp)
+        .background(
+            color = Color.Red,
+            shape = CircleShape
+        )
+        .border(
+            width = 0.2.dp,
+            color = Color.Black,
+            shape = CircleShape
+        )
+
+    val clickModifier: Modifier = if (!bool) {
+        clickBoxModifier
+            .combinedClickable(
+                onClick = { },
+                onLongClick = { onLabelClick(entry) }
+            )
+    } else clickBoxModifier
+    return clickModifier
 }
