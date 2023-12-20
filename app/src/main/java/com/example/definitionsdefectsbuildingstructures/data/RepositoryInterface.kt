@@ -35,9 +35,11 @@ interface RepositoryInterface {
 
     fun getImageDimensions(): Pair<Int, Int>
 
-    suspend fun addLabel(imageX: Float, imageY: Float, fileName: String)
+    suspend fun addLabel(imageX: Float, imageY: Float, fileName: String, width: Float, height: Float)
 
     suspend fun removeLabel()
 
     suspend fun updateLabel(newFileName: String)
+
+    suspend fun saveProgress()
 }

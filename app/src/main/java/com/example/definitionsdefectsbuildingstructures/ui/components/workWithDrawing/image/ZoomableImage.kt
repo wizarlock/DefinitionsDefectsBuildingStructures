@@ -54,6 +54,7 @@ import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawi
 import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.actions.WorkWithDrawingAction
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import org.apache.commons.io.FileUtils
 import java.io.File
 import java.util.UUID
 
@@ -68,7 +69,8 @@ fun ZoomableImage(
     val imageX = remember { mutableStateOf(0f) }
     val imageY = remember { mutableStateOf(0f) }
     val currentPhotoPath = remember { mutableStateOf("") }
-
+    var width = 0f
+    var height = 0f
     val context = LocalContext.current
     val hz = LocalDensity.current
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
@@ -129,11 +131,23 @@ fun ZoomableImage(
             val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString()
             val file = File("$dir/$fileLabel")
             file.writeBitmap(rotatedBitmap, Bitmap.CompressFormat.JPEG, 100)
+            val directoryPath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Checkpoint-K")
+            if (!directoryPath.exists()) {
+                directoryPath.mkdirs()
+            }
+            val newFile = File(
+                directoryPath,
+                uiState.photoNum.toString() + ".jpg"
+            )
+            FileUtils.copyFile(file, newFile)
+
             uiAction(
                 WorkWithDrawingAction.AddLabel(
                     imageX = imageX.value,
                     imageY = imageY.value,
-                    fileName = fileLabel
+                    fileName = fileLabel,
+                    width = width,
+                    height = height
                 )
             )
         }
@@ -160,7 +174,8 @@ fun ZoomableImage(
                     )
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
                     cameraLauncher.launch(cameraIntent)
-
+                    width = size.width.toDp().value
+                    height = size.height.toDp().value
                 }
             } else permissionState.launchPermissionRequest()
         }

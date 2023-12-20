@@ -6,8 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.definitionsdefectsbuildingstructures.data.navigation.LogIn
-import com.example.definitionsdefectsbuildingstructures.data.navigation.SignUp
+import com.example.definitionsdefectsbuildingstructures.data.navigation.ProjectsList
 import com.example.definitionsdefectsbuildingstructures.data.navigation.navigateSingleTopToAndRetainState
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start.ActionButtons
 import com.example.definitionsdefectsbuildingstructures.ui.components.authorization.start.LogoAndName
@@ -23,9 +22,8 @@ fun StartScreen(
         LogoAndName()
         ActionButtons(
             onLogInClick = {
-                navController.navigateSingleTopToAndRetainState(LogIn.route)
-            },
-            onSignUpClick = { navController.navigateSingleTopToAndRetainState(SignUp.route) }
+                navController.navigateSingleTopToAndRetainState(ProjectsList.route)
+            }
         )
     }
 }

@@ -3,7 +3,7 @@ package com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDraw
 
 
 sealed class WorkWithDrawingAction {
-    data class AddLabel(val imageX: Float, val imageY: Float, val fileName: String): WorkWithDrawingAction()
+    data class AddLabel(val imageX: Float, val imageY: Float, val fileName: String, val width: Float, val height: Float ): WorkWithDrawingAction()
 
     data class StartRecord(val name: String) : WorkWithDrawingAction()
 
@@ -13,4 +13,5 @@ sealed class WorkWithDrawingAction {
 
     data class UpdateAudioNum(val num: Int) : WorkWithDrawingAction()
 
+    object SaveProgress : WorkWithDrawingAction()
 }

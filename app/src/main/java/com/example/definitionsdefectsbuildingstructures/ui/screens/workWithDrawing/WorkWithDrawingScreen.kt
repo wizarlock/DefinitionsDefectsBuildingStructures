@@ -34,6 +34,9 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
                     uiState.initialOffsetX.value = 0f
                     uiState.initialScale.value = 1f
                     uiState.initialOffsetY.value = 0f
+                },
+                onExportClick = {
+                    viewModel.onUiAction(WorkWithDrawingAction.SaveProgress)
                 }
             )
         },
@@ -66,4 +69,5 @@ fun WorkWithDrawingScreen(navController: NavHostController) {
             )
         }
     }
+
 }

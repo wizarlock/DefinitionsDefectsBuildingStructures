@@ -1,13 +1,11 @@
 package com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.definitionsdefectsbuildingstructures.data.RepositoryInterface
 import com.example.definitionsdefectsbuildingstructures.data.datastore.DataStoreManager
-import com.example.definitionsdefectsbuildingstructures.data.datastore.UserPreferences
 import com.example.definitionsdefectsbuildingstructures.data.model.DrawingItem
 import com.example.definitionsdefectsbuildingstructures.data.model.Label
 import com.example.definitionsdefectsbuildingstructures.ui.screens.workWithDrawing.actions.WorkWithDrawingAction
@@ -54,7 +52,7 @@ class WorkWithDrawingViewModel @Inject constructor(
                 _uiState.update {
                     uiState.value.copy(
                         photoNum = userPref.photoNum,
-                        audioNum =  userPref.audioNum
+                        audioNum = userPref.audioNum
                     )
                 }
             }
@@ -66,7 +64,7 @@ class WorkWithDrawingViewModel @Inject constructor(
             is WorkWithDrawingAction.AddLabel -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     repository.addLabel(
-                        imageX = action.imageX, imageY = action.imageY, fileName = action.fileName
+                        imageX = action.imageX, imageY = action.imageY, fileName = action.fileName, width = action.width, height = action.height
                     )
                 }
             }
@@ -94,6 +92,11 @@ class WorkWithDrawingViewModel @Inject constructor(
                     dataStoreManager.updateAudioNum(action.num)
                 }
             }
+
+            WorkWithDrawingAction.SaveProgress ->
+                viewModelScope.launch {
+                    repository.saveProgress()
+                }
         }
     }
 }

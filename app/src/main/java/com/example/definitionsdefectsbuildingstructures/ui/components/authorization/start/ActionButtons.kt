@@ -15,22 +15,17 @@ import com.example.definitionsdefectsbuildingstructures.ui.components.authorizat
 @Preview
 @Composable
 fun ActionButtons(
-    onLogInClick: () -> Unit = {},
-    onSignUpClick: () -> Unit = {}
+    onLogInClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 50.dp),
+            .padding(top = 100.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CreateButtonForAuthorization(
             text = stringResource(id = R.string.logIn),
             onLogInClick
-        )
-        CreateButtonForAuthorization(
-            text = stringResource(id = R.string.signUp),
-            onSignUpClick
         )
     }
 }
